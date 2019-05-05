@@ -1,0 +1,27 @@
+$font-family: Montserrat, Arial, sans-serif;
+$line-height: 1.3;
+$letter-spacing: 0;
+
+$font-xs: 14px;
+$font-sm: 16px;
+$font-md: 28px;
+$font-lg: 36px;
+$font-xl: 80px;
+
+$color-base: #333;
+$color-bg: #fff;
+$color-primary: #e33;
+$color-link: $color-primary;
+$color-hover: darken($color-primary, 15%);
+$color-active: lighten($color-primary, 15%);
+
+$width-xs: 320px;
+$width-sm: 576px;
+$width-md: 768px;
+$width-lg: 992px;
+$width-xl: 1200px;
+
+$media-sm: screen and (min-width: $width-sm);
+$media-md: screen and (min-width: $width-md);
+$media-lg: screen and (min-width: $width-lg);
+$media-xl: screen and (min-width: $width-xl);
