@@ -1,0 +1,19 @@
+{
+  "pages": {
+    "index": {
+      "title": "Главная страница"
+    }
+  },
+  "nav": [
+    {
+      "url": "index.html",
+      "name": "Главная"
+    }, {
+      "url": "about.html",
+      "name": "О нас"
+    }, {
+      "url": "contacts",
+      "name": "Контакты"
+    }
+  ]
+}
