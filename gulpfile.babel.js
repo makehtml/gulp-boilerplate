@@ -9,8 +9,8 @@ import browserSync from 'browser-sync';
 import autoprefixer from 'gulp-autoprefixer';
 import fs from 'fs';
 import data from 'gulp-data';
+import webp from 'gulp-webp';
 import imagemin from 'gulp-imagemin';
-import webp from 'imagemin-webp';
 import mozjpeg from 'imagemin-mozjpeg';
 import pngquant from 'imagemin-pngquant';
 
@@ -88,8 +88,8 @@ export const images = () => src(path.images.original)
   ]))
   .pipe(dest(path.images.optimized));
 
-export const convertToWebp = () => src(path.images.optimized + `/**/*`)
-  .pipe(webp())
+export const convertToWebp = () => src(path.images.optimized+`/**/*`)
+  .pipe(webp({quality: 75}))
   .pipe(dest(path.images.optimized));
 
 export const clean = () => del([dirs.dest]);
