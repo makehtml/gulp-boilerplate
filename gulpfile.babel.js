@@ -11,7 +11,8 @@ import fs from 'fs';
 import data from 'gulp-data';
 import imagemin from 'gulp-imagemin';
 import webp from 'imagemin-webp';
-import jpegoprim from 'imagemin-jpegoptim';
+import mozjpeg from 'imagemin-mozjpeg';
+import pngquant from 'imagemin-pngquant';
 
 /**
  *  Основные директории
@@ -39,7 +40,11 @@ const path = {
   scripts: {
     watch: `${dirs.src}/js/**/*.js`,
     save: `${dirs.dest}/js`
-  }
+  },
+  images: {
+    original: `${dirs.src}/images/**/*`,
+    optimized: `${dirs.dest}/images/`
+  },
 };
 
 /**
@@ -76,6 +81,17 @@ export const scripts = () => src(path.scripts.watch)
   }))
   .pipe(dest(path.scripts.save));
 
+export const images = () => src(path.images.original)
+  .pipe(imagemin([
+    pngquant({quality: [0.2, 0.8]}),
+    mozjpeg({quality: 75})
+  ]))
+  .pipe(dest(path.images.optimized));
+
+export const convertToWebp = () => src(path.images.optimized + `/**/*`)
+  .pipe(webp())
+  .pipe(dest(path.images.optimized));
+
 export const clean = () => del([dirs.dest]);
 
 export const devWatch = () => {
@@ -97,6 +113,6 @@ export const dev = series(clean, parallel(styles, views), devWatch);
 /**
  * Для билда
  */
-// export const build = series(clean, parallel(styles, views, scripts, images));
+// export const build = series(clean, parallel(styles, views, scripts, images), convertToWebp);
 
 export default dev;
