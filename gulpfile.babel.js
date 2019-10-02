@@ -4,7 +4,8 @@ import sass from 'gulp-sass';
 import csso from 'gulp-csso';
 import pug from 'gulp-pug';
 import rename from 'gulp-rename';
-// import babel from 'gulp-babel';
+import babel from 'gulp-babel';
+import uglify from 'gulp-uglify';
 import browserSync from 'browser-sync';
 import autoprefixer from 'gulp-autoprefixer';
 import fs from 'fs';
@@ -53,10 +54,7 @@ const path = {
 export const styles = () => src(path.styles.compile)
   .pipe(sass.sync().on('error', sass.logError))
   .pipe(dest(path.styles.save))
-  .pipe(autoprefixer({
-    browsers: ['last 2 versions'],
-    cascade: false
-  }))
+  .pipe(autoprefixer())
   .pipe(csso())
   .pipe(rename({
     suffix: `.min`
@@ -79,6 +77,7 @@ export const scripts = () => src(path.scripts.watch)
   .pipe(babel({
     presets: ['es2015']
   }))
+  .pipe(uglify())
   .pipe(dest(path.scripts.save));
 
 export const images = () => src(path.images.original)
@@ -113,6 +112,6 @@ export const dev = series(clean, parallel(styles, views), devWatch);
 /**
  * Для билда
  */
-// export const build = series(clean, parallel(styles, views, scripts, images), convertToWebp);
+export const build = series(clean, parallel(styles, views, images, scripts), convertToWebp);
 
 export default dev;
