@@ -1,6 +1,7 @@
 import {src, dest, watch, parallel, series} from 'gulp';
 import del from 'del';
 import sass from 'gulp-sass';
+import csscomb from 'gulp-csscomb';
 import csso from 'gulp-csso';
 import pug from 'gulp-pug';
 import rename from 'gulp-rename';
@@ -28,23 +29,22 @@ const dirs = {
  */
 const path = {
   styles: {
-    watch: `${dirs.src}/sass/**/*.scss`,
+    root: `${dirs.src}/sass`,
     compile: `${dirs.src}/sass/style.scss`,
     save: `${dirs.dest}/css`
   },
   views: {
+    root: `${dirs.src}/pug`,
+    compile: `${dirs.src}/pug/pages`,
     data: `${dirs.src}/pug/data/data.json`,
-    watch: `${dirs.src}/pug/**/*.pug`,
-    compile: `${dirs.src}/pug/pages/*.pug`,
     save: `${dirs.dest}`
   },
   scripts: {
-    watch: `${dirs.src}/js/**/*.js`,
-    save: `${dirs.dest}/js`
+    root: `${dirs.src}/js`,
   },
   images: {
-    original: `${dirs.src}/images/**/*`,
-    optimized: `${dirs.dest}/images/`
+    root: `${dirs.src}/images`,
+    save: `${dirs.dest}/images`
   },
 };
 
@@ -61,7 +61,11 @@ export const styles = () => src(path.styles.compile)
   }))
   .pipe(dest(path.styles.save));
 
-export const views = () => src(path.views.compile)
+export const csscorr = () => src(`${path.styles.root}/**/*.scss`)
+  .pipe(csscomb())
+  .pipe(dest(path.styles.root));
+
+export const views = () => src(`${path.views.compile}/*.pug`)
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.views.data)
@@ -73,23 +77,23 @@ export const views = () => src(path.views.compile)
   .pipe(pug())
   .pipe(dest(path.views.save));
 
-export const scripts = () => src(path.scripts.watch)
+export const scripts = () => src(`${path.scripts.root}/**/*.js`)
   .pipe(babel({
     presets: ['es2015']
   }))
   .pipe(uglify())
-  .pipe(dest(path.scripts.save));
+  .pipe(dest(path.scripts.root));
 
-export const images = () => src(path.images.original)
+export const images = () => src(`${path.images.root}/**/*`)
   .pipe(imagemin([
     pngquant({quality: [0.2, 0.8]}),
     mozjpeg({quality: 75})
   ]))
-  .pipe(dest(path.images.optimized));
+  .pipe(dest(path.images.root));
 
-export const convertToWebp = () => src(path.images.optimized+`/**/*`)
+export const convertToWebp = () => src(`${path.images.root}/**/*`)
   .pipe(webp({quality: 75}))
-  .pipe(dest(path.images.optimized));
+  .pipe(dest(path.images.root));
 
 export const clean = () => del([dirs.dest]);
 
@@ -98,8 +102,8 @@ export const devWatch = () => {
     server: dirs.dest,
     notify: false
   });
-  watch(path.styles.watch, styles).on('change', bs.reload);
-  watch(path.views.watch, views).on('change', bs.reload);
+  watch(`${path.styles.watch}/**/*.scss`, styles).on('change', bs.reload);
+  watch(`${path.views.watch}/**/*.pug`, views).on('change', bs.reload);
   // watch(sources.scripts, scripts);
 };
 
@@ -107,7 +111,7 @@ export const devWatch = () => {
  * Задачи для разработки
  */
 // export const dev = series(clean, parallel(buildStyles, buildViews, buildScripts), devWatch);
-export const dev = series(clean, parallel(styles, views), devWatch);
+export const dev = series(csscorr, parallel(styles, views), devWatch);
 
 /**
  * Для билда
