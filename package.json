@@ -1,13 +1,14 @@
 {
-  "name": "gulp-sass",
+  "name": "Nerds",
   "version": "0.0.1",
-  "description": "Базовый каркас для начала разработки на pug + sass",
+  "description": "Сайт дизайн студии Nerds",
   "main": "",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.6.2",
-    "babel-core": "^6.26.3",
-    "babel-preset-es2015": "^6.24.1",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "babel-preset-env": "^1.7.0",
     "browser-sync": "^2.26.5",
     "del": "^4.1.1",
     "gulp": "^4.0.2",
@@ -20,10 +21,12 @@
     "gulp-pug": "^4.0.1",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
+    "gulp-svgstore": "^7.0.1",
     "gulp-uglify": "^3.0.2",
     "gulp-webp": "^4.0.1",
     "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-pngquant": "^8.0.0"
+    "imagemin-pngquant": "^8.0.0",
+    "swiper": "^5.1.0"
   },
   "browserslist": [
     "last 2 version",
@@ -46,7 +49,7 @@
   "homepage": "https://github.com/jokerinteractive/gulp-sass/",
   "babel": {
     "presets": [
-      "es2015"
+      "@babel/preset-env"
     ]
   }
 }

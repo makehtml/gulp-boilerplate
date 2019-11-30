@@ -1,0 +1,14 @@
+@mixin container {
+  display: flex;
+  box-sizing: border-box;
+  max-width: $width-xl;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $gap;
+  padding-left: $gap;
+  @media #{$media-lg} {
+    flex-direction: column;
+    padding-right: $gapSm;
+    padding-left: $gapSm;
+  }
+}

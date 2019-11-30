@@ -2,7 +2,8 @@ extends ../common/layout.pug
 
 block vars
   -var index = true
+  -var currentPageName = ""
+  -var currentPageLink = "index.html"
 
 block mainContent
-  h1 Главная
-  p Текст главной
+  .overlay

@@ -4,16 +4,26 @@
       "title": "Главная страница"
     }
   },
-  "nav": [
-    {
+  "nav": {
+    "logo": {
+      "src": "/images/",
+      "alt": "",
+      "width": "",
+      "height": "",
       "url": "index.html",
-      "name": "Главная"
-    }, {
-      "url": "about.html",
-      "name": "О нас"
-    }, {
-      "url": "contacts",
-      "name": "Контакты"
-    }
-  ]
+      "name": ""
+    },
+    "menu": [
+      {
+        "url": "index.html",
+        "name": "Главная"
+      }, {
+        "url": "about.html",
+        "name": "О нас"
+      }, {
+        "url": "contacts",
+        "name": "Контакты"
+      }
+    ]
+  }
 }

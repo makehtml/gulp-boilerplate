@@ -160,3 +160,132 @@ template {
 [hidden] {
   display: none !important;
 }
+
+.toggle {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 18px;
+
+  font-size: 0;
+
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.hamburger {
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+
+  vertical-align: middle;
+
+  background-color: #222222;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+  transition: 0.5s;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 24px;
+    height: 2px;
+
+    background-color: #222222;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    transition: 0.5s;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 0;
+
+    width: 24px;
+    height: 2px;
+
+    background-color: #222222;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    transition: 0.5s;
+  }
+  &--active {
+    display: block;
+
+    background-color: transparent;
+  }
+  &--active:before {
+    top: 0;
+
+    transform: rotate(45deg);
+  }
+  &--active:after {
+    top: 0;
+
+    transform: rotate(135deg);
+  }
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 21px;
+  height: 21px;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  &::before,
+  &::after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 15px;
+
+    width: 2px;
+    height: 21px;
+
+    background-color: $color-primary;
+  }
+  &::before {
+    transform: rotate(45deg);
+  }
+  &::after {
+    transform: rotate(-45deg);
+  }
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+
+  display: none;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.5);
+  cursor: pointer;
+
+  &--show {
+    display: block;
+  }
+}
