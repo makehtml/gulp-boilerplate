@@ -17,6 +17,7 @@ import imagemin from 'gulp-imagemin';
 import mozjpeg from 'imagemin-mozjpeg';
 import pngquant from 'imagemin-pngquant';
 import svgstore from 'gulp-svgstore';
+import concat from 'gulp-concat';
 
 /**
  *  Основные директории
@@ -45,7 +46,7 @@ const path = {
     save: `${dirs.src}/pug/data/`
   },
   scripts: {
-    root: `${dirs.src}/js`,
+    root: `${dirs.src}/js/modules`,
     save: `${dirs.dest}/js/`
   },
   images: {
@@ -93,6 +94,7 @@ export const views = () => src(`${path.views.compile}/*.pug`)
   .pipe(dest(path.views.save));
 
 export const scripts = () => src(`${path.scripts.root}/**/*.js`)
+  .pipe(concat('script.js'))
   .pipe(babel({
     presets: ['@babel/preset-env']
   }))
