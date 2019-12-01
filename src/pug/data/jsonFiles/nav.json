@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "logo": {
+      "src": "/images/",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "url": "index.html",
+      "name": ""
+    },
+    "menu": [
+      {
+        "url": "index.html",
+        "name": "Главная"
+      }, {
+        "url": "catalog.html",
+        "name": "Каталог"
+      }
+    ],
+    "user": [
+      {
+        "url": "",
+        "name": "Корзина",
+        "class": "menu__item--basket"
+      }
+    ]
+  }
+}

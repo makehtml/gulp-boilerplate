@@ -3,6 +3,7 @@ import del from 'del';
 import sass from 'gulp-sass';
 import csscomb from 'gulp-csscomb';
 import csso from 'gulp-csso';
+import jsonMerge from 'gulp-merge-json';
 import pug from 'gulp-pug';
 import rename from 'gulp-rename';
 import babel from 'gulp-babel';
@@ -35,10 +36,13 @@ const path = {
     save: `${dirs.dest}/css/`
   },
   views: {
-    data: `${dirs.src}/pug/data/data.json`,
     root: `${dirs.src}/pug`,
     compile: `${dirs.src}/pug/pages`,
     save: `${dirs.dest}`
+  },
+  json: {
+    root: `${dirs.src}/pug/data/jsonFiles`,
+    save: `${dirs.src}/pug/data/`
   },
   scripts: {
     root: `${dirs.src}/js`,
@@ -70,10 +74,16 @@ export const csscorr = () => src(`${path.styles.root}/**/*.scss`)
   .pipe(csscomb())
   .pipe(dest(path.styles.root));
 
+  export const json = () => src(`${path.json.root}/*.json`)
+  .pipe(jsonMerge({
+    fileName: 'data.json'
+  }))
+  .pipe(dest(path.json.save));
+
 export const views = () => src(`${path.views.compile}/*.pug`)
   .pipe(data((file) => {
     return JSON.parse(
-      fs.readFileSync(path.views.data)
+      fs.readFileSync(`${path.json.save}/data.json`)
     );
   }))
   .pipe(pug({
@@ -113,7 +123,9 @@ export const devWatch = () => {
   });
   watch(`${path.styles.root}/**/*.scss`, styles).on('change', bs.reload);
   watch(`${path.views.root}/**/*.pug`, views).on('change', bs.reload);
-  // watch(sources.scripts, scripts);
+  watch(`${path.json.root}/**/*.json`, json).on('change', bs.reload);
+  watch(`${path.scripts.root}/**/*.js`, scripts).on('change', bs.reload);
+  watch(`${path.images.root}/**/*.pug`, images, convertToWebp).on('change', bs.reload);
 };
 
 export const sprite = () => {
@@ -147,11 +159,11 @@ const swiperJS = () => {
  * Задачи для разработки
  */
 // export const dev = series(clean, parallel(buildStyles, buildViews, buildScripts), devWatch);
-export const dev = series(csscorr, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite), devWatch);
+export const dev = series(json, csscorr, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite), devWatch);
 
 /**
  * Для билда
  */
-export const build = series(clean, copy, csscorr, parallel(copy, styles, views, images, scripts), convertToWebp);
+export const build = series(clean, copy, json, csscorr, parallel(copy, styles, views, images, scripts), convertToWebp);
 
 export default dev;
