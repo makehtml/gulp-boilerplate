@@ -93,7 +93,7 @@ export const views = () => src(`${path.views.compile}/*.pug`)
   .pipe(pug())
   .pipe(dest(path.views.save));
 
-export const scripts = () => src(`${path.scripts.root}/**/*.js`)
+export const scripts = () => src(`${path.scripts.root}/*.js`)
   .pipe(concat('script.js'))
   .pipe(babel({
     presets: ['@babel/preset-env']
