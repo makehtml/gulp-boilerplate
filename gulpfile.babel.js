@@ -90,7 +90,6 @@ export const views = () => src(`${path.views.compile}/*.pug`)
   .pipe(pug({
     pretty: true
   }))
-  .pipe(pug())
   .pipe(dest(path.views.save));
 
 export const scripts = () => src(`${path.scripts.root}/*.js`)

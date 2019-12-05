@@ -8,34 +8,61 @@
 			"alt": "",
 			"width": "",
 			"height": "",
-			"url": "index.html",
+			"href": "index.html",
 			"name": ""
 		},
 		"menu": [
 			{
-				"url": "index.html",
+				"href": "index.html",
 				"name": "Главная"
 			},
 			{
-				"url": "catalog.html",
+				"href": "catalog.html",
 				"name": "Каталог"
 			}
 		],
 		"user": [
 			{
-				"url": "",
+				"href": "",
 				"name": "Корзина",
 				"class": "menu__item--basket"
 			}
 		]
 	},
-	"pages": {
+	"popup": {},
+	"site": {
+		"fonts": [
+			{
+				"name": ""
+			}
+		],
+		"stylesheets": [
+			{
+				"href": "css/swiper.min.css",
+				"name": "Swiper"
+			},
+			{
+				"href": "css/style.min.css",
+				"name": "Style"
+			}
+		],
 		"index": {
-			"title": "Главная страница"
+			"title": "Главная страница",
+			"href": "index.html"
 		},
 		"catalog": {
-			"title": "Каталог"
+			"title": "Каталог",
+			"href": "catalog.html"
 		}
 	},
-	"popup": {}
+	"media": [
+		{
+			"resolution": "1170",
+			"name": "desktop"
+		},
+		{
+			"resolution": "750",
+			"name": "tablet"
+		}
+	]
 }

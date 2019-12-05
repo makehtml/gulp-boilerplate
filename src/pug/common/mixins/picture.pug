@@ -1,0 +1,39 @@
+-/**
+- * Генерирует picture обертку с img картинкой для разных разрешений экрана и ретиной.
+- * @param {string} className - Класс тега img. Передается в кавычках.
+- * @param {string} alt - Описание изображения в теге img. Передается в кавычках.
+- * @param {boolean} retina - Если необходима ретина, то передается true, если графика без поддержки ретины - false.
+- * @param {string} name - Наименование файла. Передается в кавычках.
+- * @param {string} extension - Наименование файла. Передается в кавычках.
+- * @param {number} width - Ширина изображения.
+- * @param {number} height - Высота изображения.
+-*/
+mixin picture(className, alt, retina, name, extension, width, height)
+  picture
+    each size in site.media
+      source(
+        type="image/webp"
+        media=size.length > 1?
+        `(min-width:${size.resolution}px)`
+        : null
+        srcset=retina?
+        `${site.dirs.images}${name}-${size.name}.webp 1x,
+        ${site.dirs.images}${name}2x-${size.name}.webp 2x`
+        :`${site.dirs.images}${name}.webp`
+      )
+      source(
+        type=`image/${extension === 'jpg'? 'jpeg' : extension}`
+        media=size.length > 1?
+        `(min-width:${size.resolution}px)`
+        : null
+        srcset=retina?
+        `${site.dirs.images}${name}-${size.name}.${extension} 1x,
+        ${site.dirs.images}${name}2x-${size.name}.${extension} 2x`
+        :`${site.dirs.images}${name}.${extension}`
+      )
+      img(
+        class=className
+        src=`${site.dirs.images}${name}.${extension}`
+        srcet=`${site.dirs.images}${name}.${extension}`
+        width=width height=height alt=alt
+      )

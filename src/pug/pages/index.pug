@@ -1,9 +1,9 @@
 extends ../common/layout.pug
 
 block vars
-  -var index = true
-  -var currentPageName = ""
-  -var currentPageLink = "index.html"
+  -var mainPage = true
+  -var currentPageTitle = site.index.title
+  -var currentPageHref = site.index.href
 
 block mainContent
   .overlay

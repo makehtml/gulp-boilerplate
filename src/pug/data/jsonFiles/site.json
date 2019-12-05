@@ -1,0 +1,36 @@
+{
+  "site": {
+    "fonts": [
+      {
+        "name": ""
+      }
+    ],
+    "stylesheets": [
+      {
+        "href": "css/swiper.min.css",
+        "name": "Swiper"
+      },
+      {
+        "href": "css/style.min.css",
+        "name": "Style"
+      }
+    ],
+    "index": {
+      "title": "Главная страница",
+      "href": "index.html"
+    },
+    "catalog": {
+      "title": "Каталог",
+      "href": "catalog.html"
+    }
+  },
+  "media": [
+    {
+      "resolution": "1170",
+      "name": "desktop"
+    }, {
+      "resolution": "750",
+      "name": "tablet"
+    }
+  ]
+}

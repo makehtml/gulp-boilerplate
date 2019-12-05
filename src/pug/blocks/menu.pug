@@ -1,5 +1,5 @@
 ul.menu.menu--no-js
     each item in nav.menu
       li
-        a.menu__item(class=currentPageLink===item.url? "menu__item--active":null href=currentPageLink===item.url? item.url:null) #{item.name}
+        a.menu__item(class=currentPageHref===item.href? "menu__item--active":null href=currentPageHref===item.href? item.href:null) #{item.name}
     ul.menu.menu--user.menu--no-js

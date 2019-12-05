@@ -5,21 +5,21 @@
       "alt": "",
       "width": "",
       "height": "",
-      "url": "index.html",
+      "href": "index.html",
       "name": ""
     },
     "menu": [
       {
-        "url": "index.html",
+        "href": "index.html",
         "name": "Главная"
       }, {
-        "url": "catalog.html",
+        "href": "catalog.html",
         "name": "Каталог"
       }
     ],
     "user": [
       {
-        "url": "",
+        "href": "",
         "name": "Корзина",
         "class": "menu__item--basket"
       }
