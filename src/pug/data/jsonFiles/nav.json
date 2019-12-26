@@ -7,22 +7,6 @@
       "height": "",
       "href": "index.html",
       "name": ""
-    },
-    "menu": [
-      {
-        "href": "index.html",
-        "name": "Главная"
-      }, {
-        "href": "catalog.html",
-        "name": "Каталог"
-      }
-    ],
-    "user": [
-      {
-        "href": "",
-        "name": "Корзина",
-        "class": "menu__item--basket"
-      }
-    ]
+    }
   }
 }
