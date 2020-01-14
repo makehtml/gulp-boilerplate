@@ -27,12 +27,10 @@
 		],
 		"stylesheets": [
 			{
-				"href": "css/swiper.min.css",
-				"name": "Swiper"
+				"name": "swiper"
 			},
 			{
-				"href": "css/style.min.css",
-				"name": "Style"
+				"name": "style"
 			}
 		],
 		"index": {

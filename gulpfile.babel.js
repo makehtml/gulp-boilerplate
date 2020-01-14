@@ -109,6 +109,8 @@ export const images = () => src(`${path.images.root}/**/*`)
     pngquant({quality: [0.2, 0.8]}),
     mozjpeg({quality: 75})
   ]))
+  .pipe(dest(path.images.save))
+  .pipe(webp({quality: 75}))
   .pipe(dest(path.images.save));
 
 export const convertToWebp = () => src(`${path.images.root}/**/*`)
@@ -135,7 +137,7 @@ export const sprite = () => {
       inlineSvg: true
     }))
     .pipe(rename('sprite.svg'))
-    .pipe(dest(path.images.save))
+    .pipe(dest(`${path.views.root}/common/`))
 };
 
 const copy = () => {
@@ -160,11 +162,11 @@ const swiperJS = () => {
  * Задачи для разработки
  */
 // export const dev = series(clean, parallel(buildStyles, buildViews, buildScripts), devWatch);
-export const dev = series(json, csscorr, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite), devWatch);
+export const dev = series(json, csscorr, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite, images), devWatch);
 
 /**
  * Для билда
  */
-export const build = series(clean, copy, json, csscorr, parallel(copy, styles, views, images, scripts), convertToWebp);
+export const build = series(clean, copy, json, csscorr, parallel(copy, styles, views, images, scripts));
 
 export default dev;
