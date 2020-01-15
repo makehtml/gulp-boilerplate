@@ -30,5 +30,11 @@
       "resolution": "750",
       "name": "tablet"
     }
-  ]
+  ],
+  "dirs": {
+    "images": "images/",
+    "fonts": "fonts/",
+    "stylesheets": "css/",
+    "js": "js/"
+  }
 }

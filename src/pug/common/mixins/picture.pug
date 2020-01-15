@@ -14,7 +14,7 @@ mixin picture(className, alt, retina, responsive, name, extension, width, height
     each size in site.media
       source(
         type="image/webp"
-        media=resonsive? `(min-width:${size.resolution}px)`: null
+        media=responsive? `(min-width:${size.resolution}px)`: null
         srcset=retina?
         `${site.dirs.images}${name}-${size.name}@2x.webp 2x,
         ${site.dirs.images}${name}-${size.name}.webp 1x`
@@ -22,7 +22,7 @@ mixin picture(className, alt, retina, responsive, name, extension, width, height
       )
       source(
         type=`image/${extension === 'jpg'? 'jpeg' : extension}`
-        media=resonsive? `(min-width:${size.resolution}px)`: null
+        media=responsive? `(min-width:${size.resolution}px)`: null
         srcset=retina?
         `${site.dirs.images}${name}-${size.name}@2x.${extension} 2x,
         ${site.dirs.images}${name}-${size.name}.${extension} 1x`
