@@ -1,7 +1,7 @@
 {
-  "name": "Gulp шаблон",
-  "version": "1.0.0",
-  "description": "Gulp шаблон для вестки",
+  "name": "gulp-sass",
+  "version": "2.0.0",
+  "description": "Базовый каркас для начала разработки на pug + sass",
   "main": "",
   "dependencies": {},
   "devDependencies": {

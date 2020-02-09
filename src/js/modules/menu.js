@@ -2,25 +2,24 @@
  * Меню в навигации сайта
  */
 function setupMenusToggling() {
-  let menus = document.querySelectorAll('.menu');
-  let burger = document.querySelector('.nav__toggle');
+  const menuClass = '';
+  const toggleClass = '';
+  let menus = document.querySelectorAll(menuClass);
+  let toggle = document.querySelector(toggleClass);
 
   /**
-   * Скрытие всех меню в мобильной версии, если js не подгрузился
+   * Скрытие всех меню в мобильной версии, если js подгрузился
    */
-  menus.forEach( menu=> {
-    menu.classList.remove('menu--no-js');
+  menus.forEach(menu => {
+    menu.classList.remove(`.${menuClass}--no-js`);
   });
 
   /**
    * Скрытие/открытие меню навигации сайта в мобильной и планшетной версии
    */
-  burger.addEventListener('click', (evt)=> {
-    console.log('Click on burger');
-    menus.forEach(menu=> {
-      menu.classList.toggle('menu--open');
+  toggle.addEventListener('click', ()=> {
+    menus.forEach(menu => {
+      menu.classList.toggle(`.${menuClass}--open`);
     })
   });
 };
-
-// setupMenusToggling();

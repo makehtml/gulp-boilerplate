@@ -1,7 +1,7 @@
 import {src, dest, watch, parallel, series} from 'gulp';
 import del from 'del';
 import sass from 'gulp-sass';
-import csscomb from 'gulp-csscomb';
+import cssSort from 'gulp-csscomb';
 import csso from 'gulp-csso';
 import jsonMerge from 'gulp-merge-json';
 import pug from 'gulp-pug';
@@ -32,29 +32,29 @@ const dirs = {
  */
 const path = {
   styles: {
-    root: `${dirs.src}/sass`,
+    root: `${dirs.src}/sass/`,
     compile: `${dirs.src}/sass/style.scss`,
     save: `${dirs.dest}/css/`
   },
   views: {
-    root: `${dirs.src}/pug`,
-    compile: `${dirs.src}/pug/pages`,
+    root: `${dirs.src}/pug/`,
+    compile: `${dirs.src}/pug/pages/`,
     save: `${dirs.dest}`
   },
   json: {
-    root: `${dirs.src}/pug/data/jsonFiles`,
+    root: `${dirs.src}/pug/data/**/*.json`,
     save: `${dirs.src}/pug/data/`
   },
   scripts: {
-    root: `${dirs.src}/js/modules`,
+    root: `${dirs.src}/js/modules/`,
     save: `${dirs.dest}/js/`
   },
   images: {
-    root: `${dirs.src}/images`,
-    save: `${dirs.dest}/images`
+    root: `${dirs.src}/images/`,
+    save: `${dirs.dest}/images/`
   },
   libs: {
-    swiper: `./node_modules/swiper`
+    swiper: `./node_modules/swiper/`
   }
 };
 
@@ -63,6 +63,7 @@ const path = {
  */
 export const styles = () => src(path.styles.compile)
   .pipe(sass.sync().on('error', sass.logError))
+  .pipe(cssSort())
   .pipe(dest(path.styles.save))
   .pipe(autoprefixer())
   .pipe(csso())
@@ -71,20 +72,16 @@ export const styles = () => src(path.styles.compile)
   }))
   .pipe(dest(path.styles.save));
 
-export const csscorr = () => src(`${path.styles.root}/**/*.scss`)
-  .pipe(csscomb())
-  .pipe(dest(path.styles.root));
-
-  export const json = () => src(`${path.json.root}/*.json`)
+export const json = () => src(path.json.root)
   .pipe(jsonMerge({
     fileName: 'data.json'
   }))
   .pipe(dest(path.json.save));
 
-export const views = () => src(`${path.views.compile}/*.pug`)
+export const views = () => src(`${path.views.compile}*.pug`)
   .pipe(data((file) => {
     return JSON.parse(
-      fs.readFileSync(`${path.json.save}/data.json`)
+      fs.readFileSync(`${path.json.save}data.json`)
     );
   }))
   .pipe(pug({
@@ -104,7 +101,7 @@ export const scripts = () => src(`${path.scripts.root}/*.js`)
   }))
   .pipe(dest(path.scripts.save));
 
-export const images = () => src(`${path.images.root}/**/*`)
+export const images = () => src(`${path.images.root}**/*`)
   .pipe(imagemin([
     pngquant({quality: [0.2, 0.8]}),
     mozjpeg({quality: 75})
@@ -113,7 +110,7 @@ export const images = () => src(`${path.images.root}/**/*`)
   .pipe(webp({quality: 75}))
   .pipe(dest(path.images.save));
 
-export const convertToWebp = () => src(`${path.images.root}/**/*`)
+export const convertToWebp = () => src(`${path.images.root}**/*`)
   .pipe(webp({quality: 75}))
   .pipe(dest(path.images.save));
 
@@ -124,24 +121,24 @@ export const devWatch = () => {
     server: dirs.dest,
     notify: false
   });
-  watch(`${path.styles.root}/**/*.scss`, styles).on('change', bs.reload);
-  watch(`${path.views.root}/**/*.pug`, views).on('change', bs.reload);
-  watch(`${path.json.root}/**/*.json`, json).on('change', bs.reload);
-  watch(`${path.scripts.root}/**/*.js`, scripts).on('change', bs.reload);
-  watch(`${path.images.root}/**/*.pug`, images, convertToWebp).on('change', bs.reload);
+  watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
+  watch(`${path.views.root}**/*.pug`, views).on('change', bs.reload);
+  watch(`${path.json.root}**/*.json`, json).on('change', bs.reload);
+  watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
+  watch(`${path.images.root}**/*.pug`, images, convertToWebp).on('change', bs.reload);
 };
 
 export const sprite = () => {
-  return src(`${path.images.root}/**/*.svg`)
+  return src(`${path.images.root}**/*.svg`)
     .pipe(svgstore({
       inlineSvg: true
     }))
     .pipe(rename('sprite.svg'))
-    .pipe(dest(`${path.views.root}/common/`))
+    .pipe(dest(`${path.views.root}common/`))
 };
 
 const copy = () => {
-  return src(`${dirs.src}/**/*.{woff,woff2}`)
+  return src(`${dirs.src}**/*.{woff,woff2}`)
     .pipe(dest(`${dirs.dest}`))
 };
 
@@ -149,12 +146,12 @@ const copy = () => {
  * Библиотеки
  */
 const swiperCSS = () => {
-  return src(`${path.libs.swiper}/css/swiper.min.css`)
+  return src(`${path.libs.swiper}css/swiper.min.css`)
     .pipe(dest(`${path.styles.save}`))
 };
 
 const swiperJS = () => {
-  return src(`${path.libs.swiper}/js/swiper.min.js`)
+  return src(`${path.libs.swiper}js/swiper.min.js`)
     .pipe(dest(`${path.scripts.save}`))
 };
 
@@ -162,11 +159,11 @@ const swiperJS = () => {
  * Задачи для разработки
  */
 // export const dev = series(clean, parallel(buildStyles, buildViews, buildScripts), devWatch);
-export const dev = series(json, csscorr, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite, images), devWatch);
+export const dev = series(json, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite, images), devWatch);
 
 /**
  * Для билда
  */
-export const build = series(clean, copy, json, csscorr, parallel(copy, styles, views, images, scripts));
+export const build = series(clean, json, parallel(copy, styles, views, images, scripts));
 
 export default dev;

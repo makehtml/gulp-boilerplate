@@ -19,7 +19,7 @@
 		}
 	},
 	"popup": {},
-	"site": {
+	"head": {
 		"fonts": [
 			{
 				"name": ""
@@ -32,7 +32,9 @@
 			{
 				"name": "style"
 			}
-		],
+		]
+	},
+	"site": {
 		"index": {
 			"title": "Главная страница",
 			"href": "index.html"
@@ -51,5 +53,11 @@
 			"resolution": "750",
 			"name": "tablet"
 		}
-	]
+	],
+	"dirs": {
+		"images": "images/",
+		"fonts": "fonts/",
+		"stylesheets": "css/",
+		"js": "js/"
+	}
 }

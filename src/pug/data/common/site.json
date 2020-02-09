@@ -1,18 +1,5 @@
 {
   "site": {
-    "fonts": [
-      {
-        "name": ""
-      }
-    ],
-    "stylesheets": [
-      {
-        "name": "swiper"
-      },
-      {
-        "name": "style"
-      }
-    ],
     "index": {
       "title": "Главная страница",
       "href": "index.html"
