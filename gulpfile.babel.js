@@ -43,7 +43,8 @@ const path = {
   },
   json: {
     root: `${dirs.src}/pug/data/**/*.json`,
-    save: `${dirs.src}/pug/data/`
+    save: `${dirs.src}/pug/data/`,
+    compiled: `${dirs.src}/pug/data/data.json`
   },
   scripts: {
     root: `${dirs.src}/js/modules/`,
@@ -74,14 +75,14 @@ export const styles = () => src(path.styles.compile)
 
 export const json = () => src(path.json.root)
   .pipe(jsonMerge({
-    fileName: 'data.json'
+    fileName: 'data.json',
   }))
   .pipe(dest(path.json.save));
 
 export const views = () => src(`${path.views.compile}*.pug`)
   .pipe(data((file) => {
     return JSON.parse(
-      fs.readFileSync(`${path.json.save}data.json`)
+      fs.readFileSync(path.json.compiled)
     );
   }))
   .pipe(pug({
@@ -104,14 +105,14 @@ export const scripts = () => src(`${path.scripts.root}/*.js`)
 export const images = () => src(`${path.images.root}**/*`)
   .pipe(imagemin([
     pngquant({quality: [0.2, 0.8]}),
-    mozjpeg({quality: 75})
+    mozjpeg({quality: 85})
   ]))
   .pipe(dest(path.images.save))
-  .pipe(webp({quality: 75}))
+  .pipe(webp({quality: 85}))
   .pipe(dest(path.images.save));
 
 export const convertToWebp = () => src(`${path.images.root}**/*`)
-  .pipe(webp({quality: 75}))
+  .pipe(webp({quality: 85}))
   .pipe(dest(path.images.save));
 
 export const clean = () => del([dirs.dest]);
@@ -123,7 +124,7 @@ export const devWatch = () => {
   });
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
   watch(`${path.views.root}**/*.pug`, views).on('change', bs.reload);
-  watch(`${path.json.root}**/*.json`, json).on('change', bs.reload);
+  watch([`${path.json.save}blocks/*.json`, `${path.json.save}common/*.json` ], json).on('change', bs.reload);
   watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
   watch(`${path.images.root}**/*.pug`, images, convertToWebp).on('change', bs.reload);
 };
@@ -137,9 +138,9 @@ export const sprite = () => {
     .pipe(dest(`${path.views.root}common/`))
 };
 
-const copy = () => {
-  return src(`${dirs.src}**/*.{woff,woff2}`)
-    .pipe(dest(`${dirs.dest}`))
+const fonts = () => {
+  return src(`${dirs.src}/fonts/*.{woff,woff2}`)
+    .pipe(dest(`${dirs.dest}/fonts/`))
 };
 
 /**
@@ -164,6 +165,6 @@ export const dev = series(json, parallel(swiperCSS, swiperJS), parallel(styles, 
 /**
  * Для билда
  */
-export const build = series(clean, json, parallel(copy, styles, views, images, scripts));
+export const build = series(clean, json, fonts, parallel(styles, views, images, scripts));
 
 export default dev;

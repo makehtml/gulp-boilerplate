@@ -1,25 +1,26 @@
 .nav__toggle {
   position: absolute;
-  top: 50px;
+  display: flex;
+  top: 60px;
   right: 30px;
 
-  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 24px;
+  width: 35px;
   height: 18px;
 
   font-size: 0;
 
-  background: transparent;
+  background-color: #222222;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   border: 0;
   cursor: pointer;
 }
 
 .nav__hamburger {
   display: inline-block;
-  width: 24px;
+  width: 35px;
   height: 2px;
 
   vertical-align: middle;
@@ -34,7 +35,7 @@
     top: 0;
     left: 0;
 
-    width: 24px;
+    width: 35px;
     height: 2px;
 
     background-color: #222222;
@@ -48,7 +49,7 @@
     top: 15px;
     left: 0;
 
-    width: 24px;
+    width: 35px;
     height: 2px;
 
     background-color: #222222;
