@@ -47,7 +47,7 @@ const path = {
     compiled: `${dirs.src}/pug/data/data.json`
   },
   scripts: {
-    root: `${dirs.src}/js/modules/`,
+    root: `${dirs.src}/js/`,
     save: `${dirs.dest}/js/`
   },
   images: {
@@ -55,7 +55,8 @@ const path = {
     save: `${dirs.dest}/images/`
   },
   libs: {
-    swiper: `./node_modules/swiper/`
+    swiper: `./node_modules/swiper/`,
+    hamburgers: `./node_modules/hamburgers/_sass/hamburgers`
   }
 };
 
@@ -90,7 +91,7 @@ export const views = () => src(`${path.views.compile}*.pug`)
   }))
   .pipe(dest(path.views.save));
 
-export const scripts = () => src(`${path.scripts.root}/*.js`)
+export const scripts = () => src(`${path.scripts.root}*.js`)
   .pipe(concat('script.js'))
   .pipe(babel({
     presets: ['@babel/preset-env']

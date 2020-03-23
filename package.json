@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "description": "Базовый каркас для начала разработки на pug + sass",
   "main": "",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
@@ -28,7 +29,8 @@
     "gulp-webp": "^4.0.1",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
-    "swiper": "^5.1.0"
+    "swiper": "^5.1.0",
+    "hamburgers": "^1.1.3"
   },
   "browserslist": [
     "last 2 version",

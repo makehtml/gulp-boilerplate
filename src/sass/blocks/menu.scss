@@ -1,0 +1,9 @@
+.menu {
+  display: none;
+  &--no-js {
+    display: block;
+  }
+  &--active {
+    display: block;
+  }
+}
