@@ -1,27 +1,53 @@
-$font-family: Montserrat, Arial, sans-serif;
+//Шрифты
+$font-family: Arial, sans-serif;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 800;
 $line-height: 1.3;
+$line-height-xs: 10px;
+$line-height-sm: 16px;
+$line-height-md: 22px;
+$line-height-lg: 24px;
+$line-height-xl: 30px;
 $letter-spacing: 0;
-
 $font-xs: 14px;
 $font-sm: 16px;
-$font-md: 28px;
-$font-lg: 36px;
-$font-xl: 80px;
+$font-md: 18px;
+$font-lg: 24px;
+$font-xl: 36px;
+$font-xxl: 45px;
+$font-xxxl: 55px;
+$font-size: $font-xs;
+$font-weight: $font-weight-regular;
 
-$color-base: #333;
-$color-bg: #fff;
-$color-primary: #e33;
-$color-link: $color-primary;
+//Цвета
+$color-base: #283136;
+$color-bold: #000000;
+$color-bg: #ffffff;
+$color-bg-secondary: #eeeeee;
+$color-primary: #fb565a;
+$color-secondary: #00ca74;
+$color-tertiary: #efc84a;
+$color-active-control: #c1c1c1;
 $color-hover: darken($color-primary, 15%);
 $color-active: lighten($color-primary, 15%);
 
+//Размеры
 $width-xs: 320px;
 $width-sm: 576px;
 $width-md: 768px;
 $width-lg: 992px;
-$width-xl: 1200px;
+$width-xl: 1440px;
 
+//Медиа
 $media-sm: screen and (min-width: $width-sm);
 $media-md: screen and (min-width: $width-md);
 $media-lg: screen and (min-width: $width-lg);
 $media-xl: screen and (min-width: $width-xl);
+
+//Отступы
+$gap: 140px;
+$gapSm: 20px;

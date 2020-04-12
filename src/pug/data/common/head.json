@@ -1,0 +1,17 @@
+{
+  "head": {
+    "fonts": [
+      {
+        "name": ""
+      }
+    ],
+    "stylesheets": [
+      {
+        "name": "swiper"
+      },
+      {
+        "name": "style"
+      }
+    ]
+  }
+}

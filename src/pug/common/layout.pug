@@ -1,13 +1,13 @@
 doctype html
 block vars
 html(lang="ru")
+  include mixin.pug
   include head.pug
   body
     include svg.pug
-    header.header
-      include ../blocks/nav.pug
+    include ../blocks/header.pug
     main
       block mainContent
-    footer.footer
-      a.footer__copyright(href="https://jokerinteractive.ru") Создание сайта
-  script(src="js/script.js")
+    include ../blocks/footer.pug
+    script(src="js/swiper.min.js")
+    script(src="js/script.min.js")

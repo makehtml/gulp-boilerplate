@@ -1,3 +1,7 @@
 nav.nav
-  each link in nav
-    a(href=link.url class="nav__link") #{link.name}
+  a.nav__logo(href=mainPage? null:nav.logo.href)
+    img(src=nav.logo.src alt=nav.logo.name width=nav.logo.width height=nav.logo.height)
+  include menu.pug
+  button.hamburger.hamburger--collapse
+    span.hamburger-box
+      span.hamburger-inner

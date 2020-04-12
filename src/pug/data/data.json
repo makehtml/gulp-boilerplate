@@ -1,19 +1,63 @@
 {
-  "pages": {
-    "index": {
-      "title": "Главная страница"
-    }
-  },
-  "nav": [
-    {
-      "url": "index.html",
-      "name": "Главная"
-    }, {
-      "url": "about.html",
-      "name": "О нас"
-    }, {
-      "url": "contacts",
-      "name": "Контакты"
-    }
-  ]
+	"footer": {
+		"socials": {}
+	},
+	"menu": [
+		{
+			"href": "index.html",
+			"name": "Главная"
+		}
+	],
+	"nav": {
+		"logo": {
+			"src": "/images/",
+			"alt": "",
+			"width": "",
+			"height": "",
+			"href": "index.html",
+			"name": ""
+		}
+	},
+	"popup": {},
+	"head": {
+		"fonts": [
+			{
+				"name": ""
+			}
+		],
+		"stylesheets": [
+			{
+				"name": "swiper"
+			},
+			{
+				"name": "style"
+			}
+		]
+	},
+	"site": {
+		"index": {
+			"title": "Главная страница",
+			"href": "index.html"
+		},
+		"catalog": {
+			"title": "Каталог",
+			"href": "catalog.html"
+		}
+	},
+	"media": [
+		{
+			"resolution": "1170",
+			"name": "desktop"
+		},
+		{
+			"resolution": "750",
+			"name": "tablet"
+		}
+	],
+	"dirs": {
+		"images": "images/",
+		"fonts": "fonts/",
+		"stylesheets": "css/",
+		"js": "js/"
+	}
 }

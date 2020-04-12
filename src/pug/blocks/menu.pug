@@ -1,0 +1,5 @@
+ul.menu.menu--no-js
+    each item in menu
+      li
+        a.menu__item(class=currentPageHref===item.href? "menu__item--active":null href=currentPageHref===item.href? null:item.href) #{item.name}
+    ul.menu.menu--user.menu--no-js

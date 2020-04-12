@@ -1,8 +1,9 @@
 extends ../common/layout.pug
 
 block vars
-  -var currentPage = pages.index.title
+  -var mainPage = true
+  -var currentPageTitle = site.index.title
+  -var currentPageHref = site.index.href
 
 block mainContent
-  h1 Главная
-  p Текст главной
+  .overlay
