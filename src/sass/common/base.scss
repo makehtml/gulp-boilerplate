@@ -1,14 +1,10 @@
 body {
-  min-width: $width-xs;
-
-  font-size: $font-xs;
-  line-height: $line-height;
-  font-family: $font-family;
-  text-align: left;
+  font: $font-size/$line-height $font-family;
   color: $color-base;
+  background-color: $color-bg;
   letter-spacing: $letter-spacing;
 
-  background-color: $color-bg;
+  min-width: $width-xs;
 
   @media #{$media-sm} {
     min-width: $width-sm;

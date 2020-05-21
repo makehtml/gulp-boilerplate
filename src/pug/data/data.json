@@ -10,7 +10,7 @@
 	],
 	"nav": {
 		"logo": {
-			"src": "/images/",
+			"src": "/img/logo.png",
 			"alt": "",
 			"width": "",
 			"height": "",
@@ -27,7 +27,7 @@
 		],
 		"stylesheets": [
 			{
-				"name": "swiper"
+				"name": "style"
 			},
 			{
 				"name": "style"

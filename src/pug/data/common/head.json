@@ -7,9 +7,6 @@
     ],
     "stylesheets": [
       {
-        "name": "swiper"
-      },
-      {
         "name": "style"
       }
     ]

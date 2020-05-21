@@ -1,8 +1,6 @@
 .menu {
   display: none;
-  &--no-js {
-    display: block;
-  }
+  &--no-js,
   &--active {
     display: block;
   }

@@ -51,12 +51,8 @@ const path = {
     save: `${dirs.dest}/js/`
   },
   images: {
-    root: `${dirs.src}/images/`,
-    save: `${dirs.dest}/images/`
-  },
-  libs: {
-    swiper: `./node_modules/swiper/`,
-    hamburgers: `./node_modules/hamburgers/_sass/hamburgers`
+    root: `${dirs.src}/img/`,
+    save: `${dirs.dest}/img/`
   }
 };
 
@@ -145,27 +141,13 @@ const fonts = () => {
 };
 
 /**
- * Библиотеки
- */
-const swiperCSS = () => {
-  return src(`${path.libs.swiper}css/swiper.min.css`)
-    .pipe(dest(`${path.styles.save}`))
-};
-
-const swiperJS = () => {
-  return src(`${path.libs.swiper}js/swiper.min.js`)
-    .pipe(dest(`${path.scripts.save}`))
-};
-
-/**
  * Задачи для разработки
  */
-// export const dev = series(clean, parallel(buildStyles, buildViews, buildScripts), devWatch);
-export const dev = series(json, parallel(swiperCSS, swiperJS), parallel(styles, views, scripts, sprite, images), devWatch);
+export const dev = series(json, fonts, parallel(styles, views, scripts, sprite, images), devWatch);
 
 /**
  * Для билда
  */
-export const build = series(clean, json, fonts, parallel(styles, views, images, scripts));
+export const build = series(clean, json, fonts, parallel(styles, views, scripts, sprite, images));
 
 export default dev;

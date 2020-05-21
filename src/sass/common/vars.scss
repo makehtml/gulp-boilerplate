@@ -1,27 +1,8 @@
 //Шрифты
-$font-family: Arial, sans-serif;
-$font-weight-light: 300;
-$font-weight-regular: 400;
-$font-weight-medium: 500;
-$font-weight-semibold: 600;
-$font-weight-bold: 700;
-$font-weight-black: 800;
+$font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-size: 14px;
 $line-height: 1.3;
-$line-height-xs: 10px;
-$line-height-sm: 16px;
-$line-height-md: 22px;
-$line-height-lg: 24px;
-$line-height-xl: 30px;
 $letter-spacing: 0;
-$font-xs: 14px;
-$font-sm: 16px;
-$font-md: 18px;
-$font-lg: 24px;
-$font-xl: 36px;
-$font-xxl: 45px;
-$font-xxxl: 55px;
-$font-size: $font-xs;
-$font-weight: $font-weight-regular;
 
 //Цвета
 $color-base: #283136;
