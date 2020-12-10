@@ -1,33 +1,34 @@
+:root {
+  --color-base: #{$color-base};
+  --color-bold: #{$color-bold};
+  --color-bg: #{$color-bg};
+  --color-primary: #{$color-primary};
+  --color-secondary: #{$color-secondary};
+  --color-hover: #{darken($color-primary, 15%)};
+  --color-active: #{lighten($color-primary, 15%)};
+}
+
 body {
   font: $font-size/$line-height $font-family;
   color: $color-base;
   background-color: $color-bg;
   letter-spacing: $letter-spacing;
-
   min-width: $width-xs;
 
-  @media #{$media-sm} {
-    min-width: $width-sm;
-  }
-  @media #{$media-md} {
-    min-width: $width-md;
-  }
-  @media #{$media-lg} {
-    min-width: $width-lg;
-  }
-  @media #{$media-xl} {
-    min-width: $width-xl;
-  }
+  @media #{$media-sm} { min-width: $width-sm; }
+  @media #{$media-md} { min-width: $width-md; }
+  @media #{$media-lg} { min-width: $width-lg; }
+  @media #{$media-xl} { min-width: $width-xl; }
 }
 
 a {
   background-color: transparent;
+
   &:hover,
   &:focus {
     color: $color-hover;
     text-decoration: none;
   }
-  &:active {
-    color: $color-active;
-  }
+
+  &:active { color: $color-active; }
 }
