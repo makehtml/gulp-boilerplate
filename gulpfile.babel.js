@@ -3,6 +3,7 @@ import autoprefixer from 'gulp-autoprefixer';
 import babel from 'gulp-babel';
 import browserSync from 'browser-sync';
 import concat from 'gulp-concat';
+import cheerio from 'gulp-cheerio';
 import cssSort from 'gulp-csscomb';
 import csso from 'gulp-csso';
 import data from 'gulp-data';
@@ -10,10 +11,13 @@ import del from 'del';
 import fs from 'fs';
 import imagemin from 'gulp-imagemin';
 import mozjpeg from 'imagemin-mozjpeg';
+import notify from 'gulp-notify';
+import plumber from 'gulp-plumber';
 import pngquant from 'imagemin-pngquant';
 import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
 import sass from 'gulp-sass';
+import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
 import uglify from 'gulp-uglify';
 import webp from 'gulp-webp';
@@ -40,18 +44,22 @@ const path = {
     pages: `${dirs.src}/views/pages/`,
     save: `${dirs.dest}`
   },
-  json: {
-    root: `${dirs.src}/pug/data/**/*.json`,
-    save: `${dirs.src}/pug/data/`,
-    compiled: `${dirs.src}/pug/data/data.json`
-  },
+  json: `${dirs.src}/views/data.json`,
   scripts: {
     root: `${dirs.src}/js/`,
     save: `${dirs.dest}/js/`
   },
-  images: {
+  img: {
     root: `${dirs.src}/img/`,
     save: `${dirs.dest}/img/`
+  },
+  images: {
+    root: `${dirs.src}/images/`,
+    save: `${dirs.dest}/images/`
+  },
+  vendor: {
+    styles: `${dirs.src}/vendor/css/`,
+    scripts: `${dirs.src}/vendor/js/`
   }
 };
 
