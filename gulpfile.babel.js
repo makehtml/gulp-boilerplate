@@ -4,8 +4,8 @@ import sass from 'gulp-sass';
 import cssSort from 'gulp-csscomb';
 import csso from 'gulp-csso';
 import jsonMerge from 'gulp-merge-json';
-import pug from 'gulp-pug';
 import rename from 'gulp-rename';
+import render from 'gulp-nunjucks-render';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import browserSync from 'browser-sync';
@@ -37,8 +37,8 @@ const path = {
     save: `${dirs.dest}/css/`
   },
   views: {
-    root: `${dirs.src}/pug/`,
-    compile: `${dirs.src}/pug/pages/`,
+    root: `${dirs.src}/views/`,
+    pages: `${dirs.src}/views/pages/`,
     save: `${dirs.dest}`
   },
   json: {
@@ -76,14 +76,14 @@ export const json = () => src(path.json.root)
   }))
   .pipe(dest(path.json.save));
 
-export const views = () => src(`${path.views.compile}*.pug`)
+  export const views = () => src(`${path.views.pages}*.j2`)
   .pipe(data((file) => {
     return JSON.parse(
-      fs.readFileSync(path.json.compiled)
+      fs.readFileSync(path.json)
     );
   }))
-  .pipe(pug({
-    pretty: true
+  .pipe(render({
+    path: [`${path.views.root}`]
   }))
   .pipe(dest(path.views.save));
 
