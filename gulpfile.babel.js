@@ -1,23 +1,22 @@
 import {src, dest, watch, parallel, series} from 'gulp';
-import del from 'del';
-import sass from 'gulp-sass';
+import autoprefixer from 'gulp-autoprefixer';
+import babel from 'gulp-babel';
+import browserSync from 'browser-sync';
+import concat from 'gulp-concat';
 import cssSort from 'gulp-csscomb';
 import csso from 'gulp-csso';
-import jsonMerge from 'gulp-merge-json';
-import rename from 'gulp-rename';
-import render from 'gulp-nunjucks-render';
-import babel from 'gulp-babel';
-import uglify from 'gulp-uglify';
-import browserSync from 'browser-sync';
-import autoprefixer from 'gulp-autoprefixer';
-import fs from 'fs';
 import data from 'gulp-data';
-import webp from 'gulp-webp';
+import del from 'del';
+import fs from 'fs';
 import imagemin from 'gulp-imagemin';
 import mozjpeg from 'imagemin-mozjpeg';
 import pngquant from 'imagemin-pngquant';
+import rename from 'gulp-rename';
+import render from 'gulp-nunjucks-render';
+import sass from 'gulp-sass';
 import svgstore from 'gulp-svgstore';
-import concat from 'gulp-concat';
+import uglify from 'gulp-uglify';
+import webp from 'gulp-webp';
 
 /**
  *  Основные директории
@@ -59,9 +58,13 @@ const path = {
 /**
  * Основные задачи
  */
+export const sassSort = () => src(path.styles.all)
+  .pipe(cssSort())
+  .pipe(dest(path.styles.root));
+
 export const styles = () => src(path.styles.compile)
   .pipe(sass.sync().on('error', sass.logError))
-  .pipe(cssSort())
+  // .pipe(cssSort())
   .pipe(dest(path.styles.save))
   .pipe(autoprefixer())
   .pipe(csso())
@@ -70,13 +73,7 @@ export const styles = () => src(path.styles.compile)
   }))
   .pipe(dest(path.styles.save));
 
-export const json = () => src(path.json.root)
-  .pipe(jsonMerge({
-    fileName: 'data.json',
-  }))
-  .pipe(dest(path.json.save));
-
-  export const views = () => src(`${path.views.pages}*.j2`)
+export const views = () => src(`${path.views.pages}*.j2`)
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.json)
@@ -99,7 +96,16 @@ export const scripts = () => src(`${path.scripts.root}*.js`)
   }))
   .pipe(dest(path.scripts.save));
 
-export const images = () => src(`${path.images.root}**/*`)
+export const img = () => src(`${path.img.root}**/*`)
+  .pipe(imagemin([
+    pngquant({quality: [0.2, 0.8]}),
+    mozjpeg({quality: 85})
+  ]))
+  .pipe(dest(path.img.save))
+  .pipe(webp({quality: 85}))
+  .pipe(dest(path.img.save));
+
+  export const images = () => src(`${path.images.root}**/*`)
   .pipe(imagemin([
     pngquant({quality: [0.2, 0.8]}),
     mozjpeg({quality: 85})
@@ -120,34 +126,72 @@ export const devWatch = () => {
     notify: false
   });
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
-  watch(`${path.views.root}**/*.pug`, views).on('change', bs.reload);
-  watch([`${path.json.save}blocks/*.json`, `${path.json.save}common/*.json` ], json).on('change', bs.reload);
+  watch(`${path.views.root}**/*.j2`, views).on('change', bs.reload);
+  watch(`${path.json}`, views).on('change', bs.reload);
   watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
-  watch(`${path.images.root}**/*.pug`, images, convertToWebp).on('change', bs.reload);
+  watch(`${path.img.root}**/*`, img).on('change', bs.reload);
+  watch(`${path.img.root}**/*.svg`, series(sprite, views)).on('change', bs.reload);
+  watch(`${path.images.root}**/*`, images).on('change', bs.reload);
 };
 
-export const sprite = () => {
-  return src(`${path.images.root}**/*.svg`)
-    .pipe(svgstore({
-      inlineSvg: true
-    }))
-    .pipe(rename('sprite.svg'))
-    .pipe(dest(`${path.views.root}common/`))
-};
+export const sprite = () => src(`${path.img.root}**/*.svg`)
+  .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+  .pipe(svgmin({
+    plugins: [{
+      removeDoctype: true
+    }, {
+      removeXMLNS: true
+    }, {
+      removeXMLProcInst: true
+    }, {
+      removeComments: true
+    }, {
+      removeMetadata: true
+    }, {
+      removeEditorNSData: true
+    }, {
+      removeViewBox: false
+    }]
+  }))
+  .pipe(cheerio({
+    run: function ($) {
+      $('[fill]').removeAttr('fill');
+      $('[stroke]').removeAttr('stroke');
+      $('[style]').removeAttr('style');
+    },
+    parserOptions: {xmlMode: true}
+  }))
+  .pipe(svgstore({
+    inlineSvg: true
+  }))
+  .pipe(rename('sprite.svg'))
+  .pipe(dest(`${path.views.root}common/`))
 
-const fonts = () => {
-  return src(`${dirs.src}/fonts/*.{woff,woff2}`)
-    .pipe(dest(`${dirs.dest}/fonts/`))
-};
+const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
+  .pipe(dest(`${dirs.dest}/fonts/`))
+
+const vendorStyles = () => src(`${path.vendor.styles}*.min.css`)
+  .pipe(dest(`${path.styles.save}`))
+
+const vendorScripts = () => src(`${path.vendor.scripts}*.min.js`)
+  .pipe(dest(`${path.scripts.save}`))
+
+export const vendor = parallel(vendorStyles, vendorScripts);
+
+const pixelGlass = () => src(`node_modules/pixel-glass/{styles.css,script.js}`)
+  .pipe(dest(`${dirs.dest}/pp/`))
+
+const pp = () => src(`${dirs.src}/pp/*`)
+  .pipe(dest(`${dirs.dest}/pp/`))
 
 /**
  * Задачи для разработки
  */
-export const dev = series(json, fonts, parallel(styles, views, scripts, sprite, images), devWatch);
+export const dev = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite, img, images), devWatch);
 
 /**
  * Для билда
  */
-export const build = series(clean, json, fonts, parallel(styles, views, scripts, sprite, images));
+export const build = series(clean, fonts, parallel(styles, views, scripts, vendorScripts, sprite, img, images));
 
 export default dev;
