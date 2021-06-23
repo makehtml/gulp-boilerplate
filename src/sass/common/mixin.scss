@@ -1,8 +1,43 @@
+@function min-width($width-name) {
+  $width: map-get($widths, $width-name);
+
+  @return "(min-width: #{$width})";
+}
+@function max-width($width-name) {
+  $width: map-get($widths, $width-name);
+
+  @return "(max-width: #{$width - 1})";
+}
+
+@mixin media-min($min-breakpoint-name) {
+  @media #{min-width($min-breakpoint-name)} {
+    @content;
+  }
+}
+@mixin media-max($max-breakpoint-name) {
+  @media #{max-width($max-breakpoint-name)} {
+    @content;
+  }
+}
 @mixin container {
   margin-right: auto;
   margin-left: auto;
   padding-right: $gapSm;
   padding-left: $gapSm;
+  width: map-get($widths, sm);
 
-  @media #{$media-lg} { max-width: $width-xl; }
+  @include media-min(md) {
+    width: 90%;
+    min-width: map-get($widths, md);
+    padding-left: $gapMd;
+    padding-right: $gapMd;
+  }
+  @include media-min(lg) {
+    min-width: map-get($widths, lg);
+    padding-left: $gapLg;
+    padding-right: $gapLg;
+  }
+  @include media-min(xl) {
+    width: map-get($widths, xl);
+  }
 }

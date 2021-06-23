@@ -9,16 +9,16 @@
 }
 
 body {
-  font: $font-size/$line-height $font-family;
+  font: list.slash($font-size, $line-height) $font-family;
   color: $color-base;
   background-color: $color-bg;
   letter-spacing: $letter-spacing;
-  min-width: $width-xs;
+  min-width: map-get($widths, xs);
 
-  @media #{$media-sm} { min-width: $width-sm; }
-  @media #{$media-md} { min-width: $width-md; }
-  @media #{$media-lg} { min-width: $width-lg; }
-  @media #{$media-xl} { min-width: $width-xl; }
+  @include media-min(sm) { min-width: map-get($widths, sm); }
+  @include media-min(md) { min-width: map-get($widths, md); }
+  @include media-min(lg) { min-width: map-get($widths, lg); }
+  @include media-min(xl) { min-width: map-get($widths, xl); }
 }
 
 a {
