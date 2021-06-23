@@ -25,7 +25,7 @@
     "gulp-nunjucks-render": "latest",
     "gulp-plumber": "latest",
     "gulp-rename": "latest",
-    "gulp-sass": "latest",
+    "gulp-dart-sass": "latest",
     "gulp-svgmin": "latest",
     "gulp-svgstore": "latest",
     "gulp-uglify": "latest",
@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "dev": "gulp dev",
+    "start": "gulp start",
     "test": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix"
   },
   "repository": {

@@ -16,7 +16,7 @@ import plumber from 'gulp-plumber';
 import pngquant from 'imagemin-pngquant';
 import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
-import sass from 'gulp-sass';
+import sass from 'gulp-dart-sass';
 import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
 import uglify from 'gulp-uglify';
@@ -128,7 +128,7 @@ export const convertToWebp = () => src(`${path.images.root}**/*`)
 
 export const clean = () => del([dirs.dest]);
 
-export const devWatch = () => {
+export const dev = () => {
   const bs = browserSync.init({
     server: dirs.dest,
     notify: false
@@ -195,11 +195,11 @@ const pp = () => src(`${dirs.src}/pp/*`)
 /**
  * Задачи для разработки
  */
-export const dev = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite, img, images), devWatch);
+export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite, img, images), dev);
 
 /**
  * Для билда
  */
 export const build = series(clean, fonts, parallel(styles, views, scripts, vendorScripts, sprite, img, images));
 
-export default dev;
+export default start;
