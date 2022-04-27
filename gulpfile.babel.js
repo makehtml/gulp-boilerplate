@@ -9,11 +9,8 @@ import csso from 'gulp-csso';
 import data from 'gulp-data';
 import del from 'del';
 import fs from 'fs';
-import imagemin from 'gulp-imagemin';
-import mozjpeg from 'imagemin-mozjpeg';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
-import pngquant from 'imagemin-pngquant';
 import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
 import sass from 'gulp-dart-sass';
@@ -104,28 +101,6 @@ export const scripts = () => src(`${path.scripts.root}*.js`)
   }))
   .pipe(dest(path.scripts.save));
 
-export const img = () => src(`${path.img.root}**/*`)
-  .pipe(imagemin([
-    pngquant({quality: [0.2, 0.8]}),
-    mozjpeg({quality: 85})
-  ]))
-  .pipe(dest(path.img.save))
-  .pipe(webp({quality: 85}))
-  .pipe(dest(path.img.save));
-
-  export const images = () => src(`${path.images.root}**/*`)
-  .pipe(imagemin([
-    pngquant({quality: [0.2, 0.8]}),
-    mozjpeg({quality: 85})
-  ]))
-  .pipe(dest(path.images.save))
-  .pipe(webp({quality: 85}))
-  .pipe(dest(path.images.save));
-
-export const convertToWebp = () => src(`${path.images.root}**/*`)
-  .pipe(webp({quality: 85}))
-  .pipe(dest(path.images.save));
-
 export const clean = () => del([dirs.dest]);
 
 export const dev = () => {
@@ -137,9 +112,6 @@ export const dev = () => {
   watch(`${path.views.root}**/*.j2`, views).on('change', bs.reload);
   watch(`${path.json}`, views).on('change', bs.reload);
   watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
-  watch(`${path.img.root}**/*`, img).on('change', bs.reload);
-  watch(`${path.img.root}**/*.svg`, series(sprite, views)).on('change', bs.reload);
-  watch(`${path.images.root}**/*`, images).on('change', bs.reload);
 };
 
 export const sprite = () => src(`${path.img.root}**/*.svg`)
@@ -195,11 +167,11 @@ const pp = () => src(`${dirs.src}/pp/*`)
 /**
  * Задачи для разработки
  */
-export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite, img, images), dev);
+export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite), dev);
 
 /**
  * Для билда
  */
-export const build = series(clean, fonts, parallel(styles, views, scripts, vendorScripts, sprite, img, images));
+export const build = series(clean, fonts, parallel(styles, views, scripts, vendorScripts, sprite));
 
 export default start;
