@@ -1,4 +1,13 @@
 {
   "debug": false,
-  "site_name": "SiteName"
+  "site_name": "SiteName",
+  "menu": [
+    {
+      "title": "Главная",
+      "href": "index"
+    }, {
+      "title": "Контакты",
+      "href": "contacts"
+    }
+  ]
 }
