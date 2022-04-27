@@ -27,13 +27,29 @@
     <link href="pp/styles.css" rel="stylesheet">
     <script src="pp/script.js"></script>
   {% endif %}
+  <style>
+    nav a {
+      color: green;
+    }
+    nav a.active {
+      color: red;
+    }
+  </style>
 </head>
 <body>
   <div hidden style="display:none;">
     {% include "common/sprite.svg" %}
   </div>
 
+  {% include "header.j2" %}
+
   {% block content %}{% endblock %}
+
+  <footer>Footer</footer>
+
+  <script>
+    console.log('Hi!');
+  </script>
 
   {% block js %}{% endblock %}
 </body>
