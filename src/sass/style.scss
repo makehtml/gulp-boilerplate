@@ -1,7 +1,7 @@
-@use "sass:list";
-
-@import "common/mixin.scss";
-@import "common/fonts.scss";
-@import "common/normalize.scss";
-@import "common/vars.scss";
-@import "common/base.scss";
+// @use "common/fonts.scss";
+@use "common/normalize.scss";
+@use "common/base.scss";
+@use "blocks/header.scss";
+@use "blocks/nav.scss";
+@use "blocks/main.scss";
+@use "blocks/footer.scss";
