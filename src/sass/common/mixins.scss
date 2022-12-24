@@ -1,3 +1,5 @@
+@use "common/vars.scss" as *;
+
 @function min-width($width-name) {
   $width: map-get($widths, $width-name);
 
@@ -20,22 +22,22 @@
   }
 }
 @mixin container {
+  width: map-get($widths, sm);
+  padding-right: $gap-sm;
+  padding-left: $gap-sm;
   margin-right: auto;
   margin-left: auto;
-  padding-right: $gapSm;
-  padding-left: $gapSm;
-  width: map-get($widths, sm);
 
   @include media-min(md) {
     width: 90%;
     min-width: map-get($widths, md);
-    padding-left: $gapMd;
-    padding-right: $gapMd;
+    padding-right: $gap-md;
+    padding-left: $gap-md;
   }
   @include media-min(lg) {
     min-width: map-get($widths, lg);
-    padding-left: $gapLg;
-    padding-right: $gapLg;
+    padding-right: $gap-lg;
+    padding-left: $gap-lg;
   }
   @include media-min(xl) {
     width: map-get($widths, xl);

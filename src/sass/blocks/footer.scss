@@ -1,0 +1,8 @@
+@use "../common/mixins.scss" as *;
+
+.footer {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: var(--color-tertiary);
+}
+.footer__wrap { @include container; }

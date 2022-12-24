@@ -1,0 +1,8 @@
+.nav a {
+  color: var(--color-primary);
+  text-decoration: none;
+
+  &:hover { color: var(--color-hover); }
+  &:active { color: var(--color-active); }
+  &.active { color: var(--color-secondary); }
+}
