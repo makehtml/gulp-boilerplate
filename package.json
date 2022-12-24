@@ -1,38 +1,29 @@
 {
   "name": "gulp-sass-nunjucks",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Базовый каркас для начала разработки на jinja + sass",
-  "main": "",
-  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "latest",
-    "@babel/preset-env": "latest",
-    "@babel/register": "latest",
-    "babel-preset-env": "latest",
     "browser-sync": "latest",
     "del": "latest",
     "gulp": "latest",
     "gulp-autoprefixer": "latest",
-    "gulp-babel": "latest",
     "gulp-cheerio": "latest",
     "gulp-concat": "latest",
     "gulp-csscomb": "latest",
-    "gulp-csso": "latest",
+    "gulp-dart-sass": "latest",
     "gulp-data": "latest",
-    "gulp-imagemin": "latest",
+    "gulp-libsquoosh": "latest",
     "gulp-merge-json": "latest",
     "gulp-notify": "latest",
     "gulp-nunjucks-render": "latest",
     "gulp-plumber": "latest",
+    "gulp-postcss": "latest",
     "gulp-rename": "latest",
-    "gulp-dart-sass": "latest",
     "gulp-svgmin": "latest",
     "gulp-svgstore": "latest",
-    "gulp-uglify": "latest",
-    "gulp-webp": "latest",
-    "imagemin-mozjpeg": "latest",
-    "imagemin-pngquant": "latest",
+    "gulp-terser": "latest",
     "pixel-glass": "github:makehtml/pixel-glass",
+    "postcss-scss": "latest",
     "stylelint": "latest",
     "stylelint-config-recess-order": "latest",
     "stylelint-config-standard": "latest",
@@ -45,21 +36,18 @@
   "scripts": {
     "build": "gulp build",
     "start": "gulp start",
-    "test": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix"
+    "lint": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json",
+    "fix": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jokerinteractive/gulp.git"
+    "url": "git+https://github.com/jokerinteractive/gulp-boilerplate.git"
   },
   "author": "Joker Interactive",
   "license": "WTFPL",
   "bugs": {
-    "url": "https://github.com/jokerinteractive/gulp/issues"
+    "url": "https://github.com/jokerinteractive/gulp-boilerplate/issues"
   },
-  "homepage": "https://github.com/jokerinteractive/gulp/",
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
-  }
+  "homepage": "https://github.com/jokerinteractive/gulp-boilerplate/",
+  "type": "module"
 }
