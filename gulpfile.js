@@ -1,13 +1,12 @@
-import {src, dest, watch, parallel, series} from 'gulp';
+import gulp from 'gulp';
+const { src, dest, watch, parallel, series } = gulp;
 import autoprefixer from 'gulp-autoprefixer';
-import babel from 'gulp-babel';
-import browserSync from 'browser-sync';
+import browser from 'browser-sync';
 import concat from 'gulp-concat';
 import cheerio from 'gulp-cheerio';
-import cssSort from 'gulp-csscomb';
-import csso from 'gulp-csso';
+// import csso from 'gulp-csso';
 import data from 'gulp-data';
-import del from 'del';
+// import del from 'del';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
@@ -16,8 +15,7 @@ import render from 'gulp-nunjucks-render';
 import sass from 'gulp-dart-sass';
 import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
-import uglify from 'gulp-uglify';
-import webp from 'gulp-webp';
+// import uglify from 'gulp-uglify';
 
 /**
  *  Основные директории
@@ -36,18 +34,19 @@ const path = {
     compile: `${dirs.src}/sass/style.scss`,
     save: `${dirs.dest}/css/`
   },
-  views: {
-    root: `${dirs.src}/views/`,
-    pages: `${dirs.src}/views/pages/`,
+  templates: {
+    root: `${dirs.src}/templates/`,
+    pages: `${dirs.src}/templates/pages/`,
     save: `${dirs.dest}`
   },
-  json: `${dirs.src}/views/data.json`,
+  json: `${dirs.src}/templates/data.json`,
   scripts: {
     root: `${dirs.src}/js/`,
     save: `${dirs.dest}/js/`
   },
   img: {
     root: `${dirs.src}/img/`,
+    icons: `${dirs.src}/img/icons`,
     save: `${dirs.dest}/img/`
   },
   images: {
@@ -63,58 +62,52 @@ const path = {
 /**
  * Основные задачи
  */
-export const sassSort = () => src(path.styles.all)
-  .pipe(cssSort())
-  .pipe(dest(path.styles.root));
-
 export const styles = () => src(path.styles.compile)
   .pipe(sass.sync().on('error', sass.logError))
-  // .pipe(cssSort())
   .pipe(dest(path.styles.save))
   .pipe(autoprefixer())
-  .pipe(csso())
+  // .pipe(csso())
   .pipe(rename({
     suffix: `.min`
   }))
   .pipe(dest(path.styles.save));
 
-export const views = () => src(`${path.views.pages}*.j2`)
+export const templates = () => src(`${path.templates.pages}*.j2`)
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.json)
     );
   }))
   .pipe(render({
-    path: [`${path.views.root}`]
+    path: [`${path.templates.root}`]
   }))
-  .pipe(dest(path.views.save));
+  .pipe(dest(path.templates.save));
 
 export const scripts = () => src(`${path.scripts.root}*.js`)
   .pipe(concat('script.js'))
-  .pipe(babel({
-    presets: ['@babel/preset-env']
-  }))
   .pipe(dest(path.scripts.save))
-  .pipe(uglify())
+  // .pipe(uglify())
   .pipe(rename({
     suffix: '.min'
   }))
   .pipe(dest(path.scripts.save));
 
-export const clean = () => del([dirs.dest]);
+// export const clean = () => del([dirs.dest]);
 
-export const dev = () => {
-  const bs = browserSync.init({
+export const server = () => {
+  const bs = browser.init({
     server: dirs.dest,
-    notify: false
+    cors: true,
+    notify: false,
+    ui: false,
   });
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
-  watch(`${path.views.root}**/*.j2`, views).on('change', bs.reload);
-  watch(`${path.json}`, views).on('change', bs.reload);
+  watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
+  watch(`${path.json}`, templates).on('change', bs.reload);
   watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
 };
 
-export const sprite = () => src(`${path.img.root}**/*.svg`)
+export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
   .pipe(svgmin({
     plugins: [{
@@ -135,8 +128,8 @@ export const sprite = () => src(`${path.img.root}**/*.svg`)
   }))
   .pipe(cheerio({
     run: function ($) {
-      $('[fill]').removeAttr('fill');
-      $('[stroke]').removeAttr('stroke');
+      // $('[fill]').removeAttr('fill');
+      // $('[stroke]').removeAttr('stroke');
       $('[style]').removeAttr('style');
     },
     parserOptions: {xmlMode: true}
@@ -145,7 +138,7 @@ export const sprite = () => src(`${path.img.root}**/*.svg`)
     inlineSvg: true
   }))
   .pipe(rename('sprite.svg'))
-  .pipe(dest(`${path.views.root}common/`))
+  .pipe(dest(path.img.save))
 
 const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
   .pipe(dest(`${dirs.dest}/fonts/`))
@@ -167,11 +160,12 @@ const pp = () => src(`${dirs.src}/pp/*`)
 /**
  * Задачи для разработки
  */
-export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, views, scripts, vendorScripts, sprite), dev);
+export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, templates, scripts, vendorScripts, sprite), server);
 
 /**
  * Для билда
  */
-export const build = series(clean, fonts, parallel(styles, views, scripts, vendorScripts, sprite));
+// export const build = series(clean, fonts, parallel(styles, templates, scripts, vendorScripts, sprite));
+export const build = series(fonts, parallel(styles, templates, scripts, vendorScripts, sprite));
 
 export default start;
