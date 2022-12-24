@@ -1,0 +1,51 @@
+{% from "common/macros.j2" import "icon" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site_name }}</title>
+  <link rel="stylesheet" href="css/style.css">
+  {% if debug and page %}
+    <style>
+      html {
+        background-repeat: no-repeat;
+        background-position:  50% 0;
+        background-image: url("pp/{{ page }}-mobile.jpg");
+      }
+      @media (min-width: 834px) { html { background-image: url("pp/{{ page }}-tablet.jpg"); } }
+      @media (min-width: 1440px) { html { background-image: url("pp/{{ page }}-desktop.jpg"); } }
+      * { outline: 1px solid rgba(255,100,0,.2); }
+    </style>
+    <link href="pp/styles.css" rel="stylesheet">
+    <script src="pp/script.js"></script>
+  {% endif %}
+</head>
+<body>
+  {% include "header.j2" %}
+
+  <main class="main">
+    <div class="main__wrap">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__wrap">
+      Футер
+      Тестовый набор иконок:
+      {{ icon('home', class_name='test') }}
+      {{ icon('edit') }}
+      {{ icon('tool') }}
+      {{ icon('star', 64, 64) }}
+    </div>
+  </footer>
+
+  <script>
+    console.log('Привет из инлайн-скрипта, отрабатывает на всех страницах.');
+  </script>
+  <script src="js/script.min.js"></script>
+
+  {% block js %}{% endblock %}
+</body>
+</html>
