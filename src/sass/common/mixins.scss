@@ -22,6 +22,7 @@
   }
 }
 @mixin container {
+  box-sizing: border-box;
   width: map-get($widths, sm);
   padding-right: $gap-sm;
   padding-left: $gap-sm;
