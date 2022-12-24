@@ -1,19 +1,30 @@
+@use "sass:list";
+@use "common/mixins.scss" as *;
+@use "common/vars.scss" as *;
+
 :root {
   --color-base: #{$color-base};
   --color-bold: #{$color-bold};
   --color-bg: #{$color-bg};
   --color-primary: #{$color-primary};
   --color-secondary: #{$color-secondary};
+  --color-tertiary: #{$color-tertiary};
   --color-hover: #{darken($color-primary, 15%)};
   --color-active: #{lighten($color-primary, 15%)};
 }
 
+html { height: 100%; }
+
 body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  min-width: map-get($widths, xs);
+  min-height: 100%;
+  margin: 0;
   font: list.slash($font-size, $line-height) $font-family;
   color: $color-base;
-  background-color: $color-bg;
   letter-spacing: $letter-spacing;
-  min-width: map-get($widths, xs);
+  background-color: $color-bg;
 
   @include media-min(sm) { min-width: map-get($widths, sm); }
   @include media-min(md) { min-width: map-get($widths, md); }
