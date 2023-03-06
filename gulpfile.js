@@ -32,26 +32,26 @@ const path = {
   styles: {
     root: `${dirs.src}/sass/`,
     compile: `${dirs.src}/sass/style.scss`,
-    save: `${dirs.dest}/css/`
+    save: `${dirs.dest}/static/css/`
   },
   templates: {
     root: `${dirs.src}/templates/`,
     pages: `${dirs.src}/templates/pages/`,
     save: `${dirs.dest}`
   },
-  json: `${dirs.src}/templates/data.json`,
+  json: `${dirs.src}/data.json`,
   scripts: {
     root: `${dirs.src}/js/`,
-    save: `${dirs.dest}/js/`
+    save: `${dirs.dest}/static/js/`
   },
   img: {
     root: `${dirs.src}/img/`,
     icons: `${dirs.src}/img/icons`,
-    save: `${dirs.dest}/img/`
+    save: `${dirs.dest}/static/img/`
   },
   images: {
     root: `${dirs.src}/images/`,
-    save: `${dirs.dest}/images/`
+    save: `${dirs.dest}/static/images/`
   },
   vendor: {
     styles: `${dirs.src}/vendor/css/`,
@@ -100,6 +100,7 @@ export const server = () => {
     cors: true,
     notify: false,
     ui: false,
+    open: false
   });
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
   watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
