@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ site_name }}</title>
   <link rel="stylesheet" href="css/style.min.css">
+  <meta name="description" content="{{ meta_desctiption }}">
   {% if debug and page %}
     <style>
       html {
@@ -26,7 +27,7 @@
 
   <main class="main">
     <div class="main__wrap">
-      {% block content %}{% endblock %}
+      {% block content %}{% endblock content %}
     </div>
   </main>
 
@@ -46,6 +47,6 @@
   </script>
   <script src="js/script.min.js"></script>
 
-  {% block js %}{% endblock %}
+  {% block js %}{% endblock js %}
 </body>
 </html>
