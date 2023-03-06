@@ -36,8 +36,10 @@
   "scripts": {
     "build": "gulp build",
     "start": "gulp start",
-    "lint": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json",
-    "fix": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix"
+    "lint:styles": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json",
+    "lint:templates": "djlint src/templates --lint --configuration .djlintrc",
+    "fix:styles": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix",
+    "lint": "npm run lint:styles && npm run lint:templates"
   },
   "repository": {
     "type": "git",

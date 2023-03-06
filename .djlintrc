@@ -1,0 +1,11 @@
+{
+  "ignore": "H017,H031",
+  "extension": "j2",
+  "indent": "2",
+  "profile": "jinja",
+  "format_attribute_template_tags": "true",
+  "max_line_length": 240,
+  "max_attribute_length": 240,
+  "blank_line_after_tag": "from,endmacro",
+  "blank_line_before_tag": "block,extends"
+}
