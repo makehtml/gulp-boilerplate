@@ -41,21 +41,21 @@ const path = {
   },
   json: `${dirs.src}/data.json`,
   scripts: {
-    root: `${dirs.src}/js/`,
+    root: `${dirs.src}/static/js/`,
     save: `${dirs.dest}/static/js/`
   },
   img: {
-    root: `${dirs.src}/img/`,
-    icons: `${dirs.src}/img/icons`,
+    root: `${dirs.src}/static/img/`,
+    icons: `${dirs.src}/static/img/icons`,
     save: `${dirs.dest}/static/img/`
   },
   images: {
-    root: `${dirs.src}/images/`,
+    root: `${dirs.src}/static/images/`,
     save: `${dirs.dest}/static/images/`
   },
   vendor: {
-    styles: `${dirs.src}/vendor/css/`,
-    scripts: `${dirs.src}/vendor/js/`
+    styles: `${dirs.src}/static/vendor/css/`,
+    scripts: `${dirs.src}/static/vendor/js/`
   }
 };
 
