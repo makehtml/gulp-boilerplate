@@ -1,0 +1,72 @@
+@use "../mixins/btn.scss" as *;
+@use "../mixins/form.scss" as *;
+@use "../mixins/media.scss" as *;
+
+.form {
+  &--search {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-bottom: 3rem;
+
+    .form__control { margin: 0; }
+  }
+
+  @include media-min(md) {
+    &--search {
+      grid-template-columns: 5fr 1fr;
+      gap: 30px;
+
+      .form__submit { margin: 0; }
+    }
+  }
+}
+
+.form__label { margin-bottom: .5rem; }
+.form__text { @include form-text; }
+.form__checkbox { @include form-checkbox; }
+.form__radio { @include form-radio; }
+
+.form__control {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  &--error {
+    @include form-error;
+    @include is-invalid;
+  }
+  &--floating { @include form-floating; }
+  &--checkbox { @include form-checkbox-wrap; }
+}
+
+.form__error-feedback {
+  width: 100%;
+  margin-top: .25rem;
+  font-size: .875em;
+  color: var(--color-red);
+}
+
+.form__errors {
+  @include errors-list;
+
+  > li { @include is-invalid; }
+}
+
+.form__submit { @include btn-primary; }
+
+.form__cancel {
+  @include btn-secondary;
+  @include btn--border;
+}
+
+.form__email-username {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.form__email-username-col { flex-grow: 1; }
+
+.form__email-username-gap {
+  padding-top: .375rem;
+  margin-top: 1rem;
+}
