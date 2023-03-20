@@ -30,10 +30,8 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 
-  &--error {
-    @include form-error;
-    @include is-invalid;
-  }
+  &--valid { @include is-valid; }
+  &--error { @include is-invalid; }
   &--floating { @include form-floating; }
   &--checkbox { @include form-checkbox-wrap; }
 }
@@ -55,7 +53,7 @@
 
 .form__cancel {
   @include btn-secondary;
-  @include btn--border;
+  @include btn-border;
 }
 
 .form__email-username {

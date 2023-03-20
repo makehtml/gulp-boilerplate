@@ -1,15 +1,19 @@
 :root {
   --hue-primary: 229;
-  --saturation: 14%;
+  --saturation-primary: 14%;
+  --hs-primary: var(--hue-primary), var(--saturation-primary);
   --hue-secondary: 337;
   --saturation-secondary: 8%;
+  --hs-secondary: var(--hue-secondary), var(--saturation-secondary);
   --color-b1: hsl(var(--hue-primary), 15%, 15%);
   --color-b2: hsl(var(--hue-primary), 20%, 20%);
   --color-b3: hsl(var(--hue-primary), 30%, 30%);
   --color-b4: hsl(var(--hue-primary), 50%, 50%);
-  --color-b5: hsl(var(--hue-primary), 35%, 80%);
-  --color-b6: hsl(var(--hue-primary), 55%, 95%);
-  --color-b7: hsl(var(--hue-primary), 15%, 95%);
+  --color-b5: hsl(var(--hue-primary), 35%, 60%);
+  --color-b6: hsl(var(--hue-primary), 35%, 80%);
+  --color-b7: hsl(var(--hue-primary), 25%, 85%);
+  --color-b8: hsl(var(--hue-primary), 20%, 90%);
+  --color-b9: hsl(var(--hue-primary), 15%, 95%);
   --color-primary: hsl(var(--hs-primary), 52%);
   --color-primary-hover: hsl(var(--hs-primary), 63%);
   --color-primary-active: hsl(var(--hs-primary), 41%);

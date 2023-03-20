@@ -3,64 +3,45 @@
 
 $input-padding-x: .75rem;
 $input-padding-y: .375rem;
-$form-icon-valid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='var(--color-green)' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/></svg>");
-$form-icon-valid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='currentColor' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/></svg>";
-$form-icon-invalid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='var(--t-danger)'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='var(--t-danger)' stroke='none'/></svg>");
-$form-icon-invalid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='currentColor'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/></svg>";
-// $form-icon-invalid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='var(--t-danger)'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/></svg>";
-
 $svg-icons: (
-  burger: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.8 18.92" width="24.8" height="18.92"><path d="M23.8,9.46H1m22.8,8.46H1M23.8,1H1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg>'
+  burger: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.8 18.92" width="24.8" height="18.92"><path d="M23.8,9.46H1m22.8,8.46H1M23.8,1H1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg>',
+  error: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="#c22f3d"><circle cx="6" cy="6" r="4.5"/><path stroke-linejoin="round" d="M5.8 3.6h.4L6 6.5z"/><circle cx="6" cy="8.2" r=".6" fill="#c22f3d" stroke="none"/></svg>',
+  ok: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><path fill="#156e44" d="M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z"/></svg>',
+  check: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 15 13" fill="none"><path d="M1.5 7.5L5 11L13 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></svg>',
 );
-$fs-escape-chars: (
-  ' ': '%20',
-  '\'': '%22',
-  '"': '%27',
-  '#': '%23',
-  '/': '%2F',
-  ':': '%3A',
-  '(': '%28',
-  ')': '%29',
-  '%': '%25',
-  '<': '%3C',
-  '>': '%3E',
-  '\\': '%5C',
-  '^': '%5E',
-  '{': '%7B',
-  '|': '%7C',
-  '}': '%7D',
+$escape-chars: (
+  "\"": "'",
+  "<": "%3c",
+  ">": "%3e",
+  "#": "%23",
+  "%": "%25",
+  "(": "%28",
+  ")": "%29",
 );
 
 @function svg($name) {
-  // Check if icon exists
   @if not map-has-key($svg-icons, $name) {
-    @error 'icon “#{$name}” does not exists in $svg-icons map';
+    @error 'icon "#{$name}" does not exists in $svg-icons map';
+
     @return false;
   }
 
-  // Get icon data
   $icon-map: map-get($svg-icons, $name);
-
-  $escaped-string: '';
+  $escaped-string: "";
   $unquote-icon: unquote($icon-map);
-  // Loop through each character in string
+
   @for $i from 1 through str-length($unquote-icon) {
     $char: str-slice($unquote-icon, $i, $i);
+    $char-lookup: map-get($escape-chars, $char);
 
-    // Check if character is in symbol map
-    $char-lookup: map-get($fs-escape-chars, $char);
-
-    // If it is, use escaped version
     @if $char-lookup != null {
-        $char: $char-lookup;
+      $char: $char-lookup;
     }
 
-    // Append character to escaped string
     $escaped-string: $escaped-string + $char;
   }
 
-  // Return inline SVG data
-  @return url('data:image/svg+xml, #{$escaped-string} ');
+  @return url("data:image/svg+xml,#{$escaped-string}");
 }
 
 :root {
@@ -68,51 +49,6 @@ $fs-escape-chars: (
     --svg-#{$name}: #{svg($name)};
   }
 }
-
-// == TEST
-$asciiHexMap: (
-  "\"": "'",
-  "<": "%3c",
-  ">": "%3e",
-  "%": "%25",
-  "(": "%28",
-  ")": "%29",
-  // "#":
-
-  // "	": "%09",
-  // " ": "%20",
-  // "/": "%2f",
-  // "\\": "%5c",
-  // "^": "%5e",
-  // "`": "%60",
-  // "{": "%7b",
-  // "|": "%7c",
-  // "}": "%7d"
-);
-
-@function getHexCode($ascii) {
-  $n: "";
-  @if ($n == $ascii) {
-    $ascii: "";
-  }
-  $hex: map-get($asciiHexMap, $ascii);
-  @if (null == $hex) {
-    $hex: $ascii;
-  }
-  @return $hex;
-}
-
-@function encodeURI($svg: "") {
-  $url: "data:image/svg+xml,";
-  $str_len: str_length($svg);
-
-  @for $i from 1 through $str_len {
-    $url: $url + getHexCode(str_slice($svg, $i, $i));
-  }
-  @return $url;
-  // @return url("data:image/svg+xml, #{$escaped-string}");
-}
-// == END TEST
 
 @mixin input {
   margin: 0;
@@ -132,23 +68,33 @@ $asciiHexMap: (
   > select,
   > textarea {
     padding-right: calc(1.5em + .75rem);
-    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
-    // background-image: url(encodeURI($form-icon-invalid2));
-    // background-image: url(getHexCode("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e"));
-    //  url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e")
-
-    // nok: url("data:image/svg+xml;charset=utf-8,%3csvg%20xmlns=%22http:%2f%2fwww.w3.org%2f2000%2fsvg%22%20xmlns='http:%2f%2fwww.w3.org%2f2000%2fsvg'%20viewBox='0%200%208%208'%3e%3cpath%20fill='currentColor'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'%2f%3e%3c%2fsvg%3e")
-    // ok:  url("data:image/svg+xml;charset=utf-8,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%208%208'%3e%3cpath%20fill='currentColor'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e")
-    //                                           "%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%208%208'%3E%3Cpath%20fill%3D'var(--t-danger)'%20d%3D'M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'%2F%3E%3C%2Fsvg%3E"
-    // ok2: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='currentColor' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e")
-    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%208%208'%3e%3cpath%20fill='red'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-    // background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='currentColor'%3E%3Cdefs%3E%3Cstyle%3E.r%7Bcolor:var(--t-danger);%7D%3C/style%3E%3C/defs%3E%3Ccircle cx='6' cy='6' r='4.5'/%3E%3Cpath class='r' stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3E%3Ccircle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/%3E%3C/svg%3E");
-
-    background-image: var(--svg-burger);
+    background-image: var(--svg-error);
     background-repeat: no-repeat;
     background-position: right calc(.375em + .188rem) center;
     background-size: calc(.75em + .375rem) calc(.75em + .375rem);
     border-color: var(--t-danger);
+
+    &:focus { box-shadow: 0 0 0 .2rem hsla(0, 86%, 50%, .25); }
+  }
+}
+@mixin is-valid {
+  > [type="email"],
+  > [type="number"],
+  > [type="password"],
+  > [type="search"],
+  > [type="tel"],
+  > [type="text"],
+  > [type="url"],
+  > select,
+  > textarea {
+    padding-right: calc(1.5em + .75rem);
+    background-image: var(--svg-ok);
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .188rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    border-color: var(--t-success);
+
+    &:focus { box-shadow: 0 0 0 .2rem hsla(146, 88%, 25%, .25); }
   }
 }
 @mixin form-text {
@@ -198,7 +144,7 @@ $asciiHexMap: (
     color: var(--color-b4);
     white-space: nowrap;
     pointer-events: none;
-    background-image: linear-gradient(to bottom, var(--theme-bg) 0%, var(--theme-bg) 55%, var(--theme-transparent) 100%);
+    background-image: linear-gradient(to top, var(--theme-bg) 0%, var(--theme-bg) 55%, var(--theme-transparent) 100%);
     transition: var(--animation-duration) background-image ease-in-out, transform var(--animation-duration-fast) ease-in-out;
     transform-origin: bottom left;
   }
@@ -213,24 +159,10 @@ $asciiHexMap: (
   > select,
   > textarea {
     &:focus,
-    &:not(:placeholder-shown) { ~ label { transform: scale(0.65) translateX(0.25rem) translateY(calc(-100% - .7rem)); } }
+    &:not(:placeholder-shown) { ~ label { transform: scale(.65) translateX(.25rem) translateY(calc(-100% - .7rem)); } }
 
     // &:valid { border-color: var(--color-primary-active); }
     &::placeholder { color: transparent; }
-  }
-}
-@mixin form-error {
-  > [type="email"],
-  > [type="number"],
-  > [type="password"],
-  > [type="search"],
-  > [type="tel"],
-  > [type="text"],
-  > [type="url"],
-  > textarea {
-    border-color: var(--t-danger) !important; // без !important специфичность ниже чем у &:valid
-
-    &:focus { box-shadow: 0 0 0 .25rem hsla(var(--hue-red), 86%, 50%, .25); }
   }
 }
 @mixin errors-list {
@@ -292,7 +224,7 @@ $asciiHexMap: (
       width: 14px;
       height: 12px;
       content: "";
-      background-image: url("data:image/svg+xml,%3Csvg width='14' height='12' viewBox='0 0 15 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 7.5L5 11L13 2' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-image: var(--svg-check);
       transform: translate(-50%, -50%);
     }
   }

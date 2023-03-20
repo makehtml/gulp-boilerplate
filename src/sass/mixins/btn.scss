@@ -57,11 +57,11 @@
   &:hover { background-color: var(--color-transparent-hover); }
   &:active { background-color: var(--color-transparent-active); }
 }
-@mixin btn--lg {
+@mixin btn-lg {
   font-size: large;
   font-weight: 200;
 }
-@mixin btn--border {
+@mixin btn-border {
   padding: calc(.75rem - 1px) calc(1.5rem - 1px);
   border: 1px solid var(--theme-border);
 }
