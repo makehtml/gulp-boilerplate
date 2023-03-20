@@ -1,0 +1,52 @@
+:root {
+  --hue-primary: 229;
+  --saturation: 14%;
+  --hue-secondary: 337;
+  --saturation-secondary: 8%;
+  --color-b1: hsl(var(--hue-primary), 15%, 15%);
+  --color-b2: hsl(var(--hue-primary), 20%, 20%);
+  --color-b3: hsl(var(--hue-primary), 30%, 30%);
+  --color-b4: hsl(var(--hue-primary), 50%, 50%);
+  --color-b5: hsl(var(--hue-primary), 35%, 80%);
+  --color-b6: hsl(var(--hue-primary), 55%, 95%);
+  --color-b7: hsl(var(--hue-primary), 15%, 95%);
+  --color-primary: hsl(var(--hs-primary), 52%);
+  --color-primary-hover: hsl(var(--hs-primary), 63%);
+  --color-primary-active: hsl(var(--hs-primary), 41%);
+  --color-secondary: hsl(var(--hs-secondary), 52%);
+  --color-secondary-hover: hsl(var(--hs-secondary), 63%);
+  --color-secondary-active: hsl(var(--hs-secondary), 41%);
+  --color-title: var(--color-b1);
+  --color-transparent: hsla(var(--hs-primary), 50%, .2);
+  --color-transparent-accent: hsla(var(--hs-primary), 60%, .1);
+  --color-transparent-hover: hsla(var(--hue-primary), 10%, 50%, .3);
+  --color-transparent-active: hsla(var(--hue-primary), 10%, 50%, .4);
+  --color-transparent-medium: hsla(var(--hue-primary), 25%, 25%, .5);
+  --color-transparent-dark: hsla(var(--hue-primary), 10%, 10%, .7);
+  --animation-multiplier: 3;
+  --animation-duration: calc(var(--animation-multiplier) * .375s);
+  --animation-duration-fast: calc(var(--animation-multiplier) * .125s);
+  --animation-duration-slow: calc(var(--animation-multiplier) * .5s);
+  --animation-theme: var(--animation-duration-fast) color ease-in-out, var(--animation-duration-slow) background-color ease-in-out, var(--animation-duration-slow) border-color ease-in-out;
+  --theme-fg: var(--color-b1);
+  --theme-fg-alt: var(--color-b0);
+  --theme-bg: var(--color-b9);
+  --theme-bg-alt: var(--color-b7);
+  --theme-bg-secondary: var(--color-b6);
+  --theme-border: hsla(var(--hue-primary), 65%, 10%, .1);
+  --theme-border-focus: var(--color-b5);
+  --theme-transparent: hsla(var(--hue-primary), 11%, 100%, 0);
+  --theme-control: var(--color-primary);
+
+  // TODO: заменить на стандартные
+  --t-default: #bdbdbd;
+  --t-success: #198754;
+  --t-info: #0dcaf0;
+  --t-warning: #ffc107;
+  --t-danger: #dc3545;
+  --tt-default: #a3a3a3;
+  --tt-success: #156e44;
+  --tt-info: #0bb4d6;
+  --tt-warning: #e6ae07;
+  --tt-danger: #c22f3d;
+}

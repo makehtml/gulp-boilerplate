@@ -1,6 +1,6 @@
 @use "sass:list";
-@use "common/mixins.scss" as *;
-@use "common/vars.scss" as *;
+@use "../mixins/media.scss" as *;
+@use "../common/vars.scss" as *;
 
 :root {
   --color-base: #{$color-base};
