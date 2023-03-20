@@ -1,0 +1,89 @@
+@use "../mixins/media.scss" as *;
+
+@mixin btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem 1.5rem;
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+
+  &:hover { text-decoration: none; }
+
+  &:disabled {
+    cursor: progress;
+    background-color: var(--theme-border);
+  }
+
+  > svg {
+    margin-right: .7em;
+    margin-left: -.7em;
+  }
+
+  > span + svg {
+    margin-right: -4px;
+    margin-left: 14px;
+  }
+
+  @include media-min(xl) { justify-content: initial; }
+}
+@mixin btn-primary {
+  @include btn;
+
+  color: white;
+  background-color: var(--color-primary);
+
+  &:hover,
+  &:focus,
+  &:active { color: white; }
+  &:hover { background-color: var(--color-primary-hover); }
+  &:focus { outline: 3px solid var(--color-transparent-hover); }
+  &:active { background-color: var(--color-primary-active); }
+}
+@mixin btn-secondary {
+  @include btn;
+
+  color: var(--color-secondary);
+  background-color: var(--color-transparent);
+
+  &:hover,
+  &:focus,
+  &:active { color: var(--color-secondary); }
+  &:hover { background-color: var(--color-transparent-hover); }
+  &:active { background-color: var(--color-transparent-active); }
+}
+@mixin btn--lg {
+  font-size: large;
+  font-weight: 200;
+}
+@mixin btn--border {
+  padding: calc(.75rem - 1px) calc(1.5rem - 1px);
+  border: 1px solid var(--theme-border);
+}
+@mixin btn-ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-primary);
+
+  > svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+  }
+}
+@mixin btn-preview {
+  @include btn-ico;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}

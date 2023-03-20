@@ -1,0 +1,347 @@
+@use "./btn.scss" as *;
+@use "./media.scss" as *;
+
+$input-padding-x: .75rem;
+$input-padding-y: .375rem;
+$form-icon-valid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='var(--color-green)' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/></svg>");
+$form-icon-valid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='currentColor' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/></svg>";
+$form-icon-invalid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='var(--t-danger)'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='var(--t-danger)' stroke='none'/></svg>");
+$form-icon-invalid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='currentColor'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/></svg>";
+// $form-icon-invalid2: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='var(--t-danger)'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/></svg>";
+
+$svg-icons: (
+  burger: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.8 18.92" width="24.8" height="18.92"><path d="M23.8,9.46H1m22.8,8.46H1M23.8,1H1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg>'
+);
+$fs-escape-chars: (
+  ' ': '%20',
+  '\'': '%22',
+  '"': '%27',
+  '#': '%23',
+  '/': '%2F',
+  ':': '%3A',
+  '(': '%28',
+  ')': '%29',
+  '%': '%25',
+  '<': '%3C',
+  '>': '%3E',
+  '\\': '%5C',
+  '^': '%5E',
+  '{': '%7B',
+  '|': '%7C',
+  '}': '%7D',
+);
+
+@function svg($name) {
+  // Check if icon exists
+  @if not map-has-key($svg-icons, $name) {
+    @error 'icon “#{$name}” does not exists in $svg-icons map';
+    @return false;
+  }
+
+  // Get icon data
+  $icon-map: map-get($svg-icons, $name);
+
+  $escaped-string: '';
+  $unquote-icon: unquote($icon-map);
+  // Loop through each character in string
+  @for $i from 1 through str-length($unquote-icon) {
+    $char: str-slice($unquote-icon, $i, $i);
+
+    // Check if character is in symbol map
+    $char-lookup: map-get($fs-escape-chars, $char);
+
+    // If it is, use escaped version
+    @if $char-lookup != null {
+        $char: $char-lookup;
+    }
+
+    // Append character to escaped string
+    $escaped-string: $escaped-string + $char;
+  }
+
+  // Return inline SVG data
+  @return url('data:image/svg+xml, #{$escaped-string} ');
+}
+
+:root {
+  @each $name, $code in $svg-icons {
+    --svg-#{$name}: #{svg($name)};
+  }
+}
+
+// == TEST
+$asciiHexMap: (
+  "\"": "'",
+  "<": "%3c",
+  ">": "%3e",
+  "%": "%25",
+  "(": "%28",
+  ")": "%29",
+  // "#":
+
+  // "	": "%09",
+  // " ": "%20",
+  // "/": "%2f",
+  // "\\": "%5c",
+  // "^": "%5e",
+  // "`": "%60",
+  // "{": "%7b",
+  // "|": "%7c",
+  // "}": "%7d"
+);
+
+@function getHexCode($ascii) {
+  $n: "";
+  @if ($n == $ascii) {
+    $ascii: "";
+  }
+  $hex: map-get($asciiHexMap, $ascii);
+  @if (null == $hex) {
+    $hex: $ascii;
+  }
+  @return $hex;
+}
+
+@function encodeURI($svg: "") {
+  $url: "data:image/svg+xml,";
+  $str_len: str_length($svg);
+
+  @for $i from 1 through $str_len {
+    $url: $url + getHexCode(str_slice($svg, $i, $i));
+  }
+  @return $url;
+  // @return url("data:image/svg+xml, #{$escaped-string}");
+}
+// == END TEST
+
+@mixin input {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  background: var(--theme-bg);
+}
+@mixin is-invalid {
+  > [type="email"],
+  > [type="number"],
+  > [type="password"],
+  > [type="search"],
+  > [type="tel"],
+  > [type="text"],
+  > [type="url"],
+  > select,
+  > textarea {
+    padding-right: calc(1.5em + .75rem);
+    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    // background-image: url(encodeURI($form-icon-invalid2));
+    // background-image: url(getHexCode("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e"));
+    //  url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e")
+
+    // nok: url("data:image/svg+xml;charset=utf-8,%3csvg%20xmlns=%22http:%2f%2fwww.w3.org%2f2000%2fsvg%22%20xmlns='http:%2f%2fwww.w3.org%2f2000%2fsvg'%20viewBox='0%200%208%208'%3e%3cpath%20fill='currentColor'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'%2f%3e%3c%2fsvg%3e")
+    // ok:  url("data:image/svg+xml;charset=utf-8,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%208%208'%3e%3cpath%20fill='currentColor'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e")
+    //                                           "%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%208%208'%3E%3Cpath%20fill%3D'var(--t-danger)'%20d%3D'M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'%2F%3E%3C%2Fsvg%3E"
+    // ok2: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='currentColor' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e")
+    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%208%208'%3e%3cpath%20fill='red'%20d='M2.3%206.73L.6%204.53c-.4-1.04.46-1.4%201.1-.8l1.1%201.4%203.4-3.8c.6-.63%201.6-.27%201.2.7l-4%204.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    // background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='currentColor'%3E%3Cdefs%3E%3Cstyle%3E.r%7Bcolor:var(--t-danger);%7D%3C/style%3E%3C/defs%3E%3Ccircle cx='6' cy='6' r='4.5'/%3E%3Cpath class='r' stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3E%3Ccircle cx='6' cy='8.2' r='.6' fill='currentColor' stroke='none'/%3E%3C/svg%3E");
+
+    background-image: var(--svg-burger);
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .188rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    border-color: var(--t-danger);
+  }
+}
+@mixin form-text {
+  @include input;
+
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  color: var(--theme-fg);
+  background-color: var(--theme-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--theme-border);
+
+  // transition: var(--animation-theme-fast), border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  appearance: none;
+
+  &:focus {
+    border-color: var(--theme-border-focus);
+    outline: 0;
+    box-shadow: 0 0 0 .2rem hsla(208, 11%, 71%, .25);
+  }
+
+  &:autofill,
+  &:focus:autofill {
+    color: green;
+    -webkit-text-fill-color: var(--theme-fg-alt);
+    box-shadow: 0 0 0 1000px var(--theme-bg) inset;
+  }
+
+  &:valid:not(:placeholder-shown) { border-color: var(--t-success) !important; }
+  &:invalid:not(:placeholder-shown) { border-color: var(--t-danger) !important; }
+
+  &::placeholder {
+    color: var(--color-b4);
+    opacity: 1;
+  }
+}
+@mixin form-floating {
+  position: relative;
+
+  > label {
+    position: absolute;
+    top: $input-padding-y;
+    left: $input-padding-x - .15rem;
+    padding: 0 .15rem;
+    color: var(--color-b4);
+    white-space: nowrap;
+    pointer-events: none;
+    background-image: linear-gradient(to bottom, var(--theme-bg) 0%, var(--theme-bg) 55%, var(--theme-transparent) 100%);
+    transition: var(--animation-duration) background-image ease-in-out, transform var(--animation-duration-fast) ease-in-out;
+    transform-origin: bottom left;
+  }
+
+  > [type="email"],
+  > [type="number"],
+  > [type="password"],
+  > [type="search"],
+  > [type="tel"],
+  > [type="text"],
+  > [type="url"],
+  > select,
+  > textarea {
+    &:focus,
+    &:not(:placeholder-shown) { ~ label { transform: scale(0.65) translateX(0.25rem) translateY(calc(-100% - .7rem)); } }
+
+    // &:valid { border-color: var(--color-primary-active); }
+    &::placeholder { color: transparent; }
+  }
+}
+@mixin form-error {
+  > [type="email"],
+  > [type="number"],
+  > [type="password"],
+  > [type="search"],
+  > [type="tel"],
+  > [type="text"],
+  > [type="url"],
+  > textarea {
+    border-color: var(--t-danger) !important; // без !important специфичность ниже чем у &:valid
+
+    &:focus { box-shadow: 0 0 0 .25rem hsla(var(--hue-red), 86%, 50%, .25); }
+  }
+}
+@mixin errors-list {
+  padding-left: 0;
+  font-size: .85rem;
+  color: var(--tt-danger);
+  text-align: left;
+  list-style-type: none;
+
+  li::before { content: "🔹 "; }
+}
+@mixin form-submit {
+  @include btn-primary;
+
+  width: auto;
+  margin-top: 1.5rem;
+
+  @include media-min(xl) { justify-content: center; }
+}
+@mixin form-checkbox-wrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  &:last-child { margin-bottom: 0; }
+
+  > label {
+    padding-left: 12px;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+}
+@mixin form-checkbox {
+  position: relative;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  cursor: pointer;
+  border: 1px solid var(--theme-border);
+  border-radius: 4px;
+  appearance: none;
+
+  &:disabled {
+    background-color: var(--theme-border-focus);
+    border-color: var(--theme-border-focus);
+
+    + label { color: var(--theme-border-focus); }
+  }
+
+  &:checked {
+    background-color: var(--theme-control);
+    border-color: var(--theme-control);
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      height: 12px;
+      content: "";
+      background-image: url("data:image/svg+xml,%3Csvg width='14' height='12' viewBox='0 0 15 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 7.5L5 11L13 2' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+@mixin form-radio {
+  padding-left: 0;
+  list-style-type: none;
+
+  > li { @include form-checkbox-wrap; }
+
+  [type="radio"] {
+    position: relative;
+    box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--theme-border);
+    border-radius: 50%;
+    appearance: none;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 18px;
+      height: 18px;
+      margin-top: -9px;
+      margin-left: -9px;
+      content: "";
+      background-color: var(--theme-control);
+      border-radius: 50%;
+
+      // transition: .2s ease-in-out;
+      transform: scale(0);
+    }
+
+    &:disabled {
+      background-color: var(--theme-border-focus);
+      border-color: var(--theme-border-focus);
+
+      + label { color: var(--theme-border-focus); }
+    }
+
+    &:checked {
+      border-color: var(--theme-control);
+      border-width: 2px;
+
+      &::before { transform: scale(1); }
+    }
+  }
+}
