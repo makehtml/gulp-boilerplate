@@ -1,0 +1,20 @@
+{% macro field(field_value, class=None, placeholder='', field_value='', form_field='input', field_type='text') %}
+  {#
+  Макрос для frontend сборки.
+
+  Parameters:
+  :param {string} placeholder — text for placeholder
+  :param {string} field_value — text for label or value for input
+  :param {string} form_field — one of [label, input, textarea]
+  :param {string} input_type — one of [text, email, tel, ..]
+
+  #}
+  {% if form_field == 'input' %}
+    <input class="{{ class }}" id="n1" type="{{ field_type }}" placeholder="{{ placeholder }}">
+  {% endif %}
+{% endmacro %}
+
+{% macro field_label(field_value, class) %}
+  <label class="{{ class }}" for="n1">{{ field_value }}</label>
+{% endmacro %}
+

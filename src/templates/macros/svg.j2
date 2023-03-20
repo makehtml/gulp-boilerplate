@@ -1,3 +1,4 @@
+{% from "macros/routes.j2" import url_for %}
 {% macro icon(icon_name, area_text, class_name=None, width=24, height=24) -%}
   {#
   Генерирует обертку с svg иконкой, взятую из спрайта
@@ -9,7 +10,8 @@
   @param {number} width - Ширина изображения, по-умолчанию 24.
   @param {number} height - Высота изображения, по-умолчанию 24.
   #}
+  {% set sprite_filename = url_for('static', filename='img/sprite.svg') %}
   <svg{% if class_name %} class="{{ class_name }}"{% endif %} aria-label="{{ area_text }}" width="{{ width }}" height="{{ height }}">
-    <use xlink:href="img/sprite.svg#{{ icon_name }}"></use>
+    <use xlink:href="{{ sprite_filename }}#{{ icon_name }}"></use>
   </svg>
 {%- endmacro %}

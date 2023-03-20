@@ -1,0 +1,94 @@
+{% from "macros/wtforms.j2" import field, field_label %}
+{#
+  Макросы формы
+
+  base(field, bem_block='form', floating_label=True, show_errors=True)
+  errors(field) — показ ошибок для поля
+  form_errors(form) — показ ошибок для формы
+#}
+{% macro base(field_value, bem_block='form', floating_label=true, show_errors=false, field_errors=false) -%}
+  <div class="{{ bem_block }}__control{% if floating_label %} {{ bem_block }}__control--floating{% endif %}{% if field.errors %} form__control--error{% endif %}">
+    {% set class_field = bem_block + '__text' %}
+    {% set class_label = bem_block + '__label' %}
+    {{ field(field_value, class=class_field, placeholder=field_value) }}
+    {{ field_label(field_value, class=class_label) }}
+    {% if show_errors %}{{ errors(field_errors) }}{% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro errors(field) %}
+  {% if field and field.errors %}
+    <div class="fs-div" id="{{ field.id if field else 'fs-field' }}">
+      <ul class="form__error">
+        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro form_errors(form) %}
+  {% if form.form_errors %}
+    <div class="fs-div" id="fs-form-errors">
+      <ul class="form__error">
+        {% for error in form.form_errors %}<li class="fs-error-msg">{{ error }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro prop_next() -%}
+  {% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}
+{%- endmacro %}
+
+{% macro errors(errors, bem_block='form') -%}
+  {% if errors %}
+    <ul class="{{ bem_block }}__errors">
+      {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+{%- endmacro %}
+
+{% macro checkbox(field, bem_block='form') -%}
+  <div class="{{ bem_block }}__control {{ bem_block }}__control--checkbox{% if field.errors %} {{ bem_block }}__control--error{% endif %}">
+    {{ field(class='%s__checkbox' % bem_block) }}
+    {{ field_label(class='%s__label' % bem_block) }}
+    {{ errors(field.errors) }}
+  </div>
+{%- endmacro %}
+
+{% macro radio(field, bem_block='form') -%}
+  <div class="{{ bem_block }}__control {{ bem_block }}__control--radio{% if field.errors %} {{ bem_block }}__control--error{% endif %}">
+    {{ field(class='%s__radio' % bem_block) }}
+    {{ field_label(class='%s__label' % bem_block) }}
+    {{ errors(field.errors) }}
+  </div>
+{%- endmacro %}
+
+{% macro btn(field, bem_block='form') %}
+  {{ field(class='%s__submit' % bem_block)|safe }}
+{% endmacro %}
+
+{% macro prop_next() -%}
+  {% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}
+{%- endmacro %}
+
+{% macro render_field_errors_js(field) %}
+  {% if field and field.errors %}
+    {% block js %}
+      <script src="{{ url_for('static', filename='js/toastify.min.js') }}"></script>
+    {% endblock js %}
+
+    {% for error in field.errors %}
+      <script>
+        Toastify({
+          text: '{{ error }}',
+          duration: 7000,
+          close: true,
+          stopOnFocus: true,
+          gravity: 'bottom',
+          className: 'danger'
+        }).showToast();
+      </script>
+    {% endfor %}
+  {% endif %}
+{% endmacro %}

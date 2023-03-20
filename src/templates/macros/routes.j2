@@ -1,0 +1,7 @@
+{%- macro url_for(route, filename=None, pagename=None) -%}
+  {%- if route == 'static' -%}
+    /static/{{ filename }}
+  {%- elif route == 'page.one' -%}
+    /{{ pagename }}.html
+  {%- endif -%}
+{%- endmacro -%}
