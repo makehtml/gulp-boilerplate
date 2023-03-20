@@ -1,3 +1,4 @@
+{%- from "macros/form.j2" import base, btn -%}
 {% extends "base.j2" %}
 
 {% set page = "styleguide" %}
@@ -22,4 +23,20 @@
       <td>td3</td>
     </tr>
   </table>
+  <form class="form">
+    {{ base("Логин") }}
+    {{ base("Проверка", floating_label=False) }}
+    <div class="form__control form__control--floating">
+      <input class="form__text" id="login" type="text" placeholder="Логин">
+      <label class="form__label" for="login">Логин</label>
+    </div>
+    <div class="form__control form__control--floating">
+      <input class="form__text" id="email" type="email" placeholder="Email">
+      <label class="form__label" for="email">Email</label>
+    </div>
+    <div class="form__control">
+      <input class="form__text" placeholder="Обязательное поле" required>
+    </div>
+    <button class="form__submit" type="submit">Отправить</button>
+  </form>
 {% endblock content %}
