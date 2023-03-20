@@ -32,7 +32,8 @@ const path = {
   styles: {
     root: `${dirs.src}/sass/`,
     compile: `${dirs.src}/sass/style.scss`,
-    save: `${dirs.dest}/static/css/`
+    save: `${dirs.dest}/static/css/`,
+    css: `${dirs.src}/css/*.css`,
   },
   templates: {
     root: `${dirs.src}/templates/`,
@@ -44,9 +45,13 @@ const path = {
     root: `${dirs.src}/static/js/`,
     save: `${dirs.dest}/static/js/`
   },
+  fonts: {
+    root: `${dirs.src}/static/fonts/`,
+    save: `${dirs.dest}/static/fonts/`
+  },
   img: {
     root: `${dirs.src}/static/img/`,
-    icons: `${dirs.src}/static/img/icons`,
+    icons: `${dirs.src}/static/img/icons/`,
     save: `${dirs.dest}/static/img/`
   },
   images: {
@@ -54,14 +59,17 @@ const path = {
     save: `${dirs.dest}/static/images/`
   },
   vendor: {
-    styles: `${dirs.src}/static/vendor/css/`,
-    scripts: `${dirs.src}/static/vendor/js/`
+    styles: `${dirs.src}/vendor/css/`,
+    scripts: `${dirs.src}/vendor/js/`
   }
 };
 
 /**
  * Основные задачи
  */
+export const css = () => src(path.styles.css)
+  .pipe(dest(path.styles.save))
+
 export const styles = () => src(path.styles.compile)
   .pipe(sass.sync().on('error', sass.logError))
   .pipe(dest(path.styles.save))
@@ -73,6 +81,7 @@ export const styles = () => src(path.styles.compile)
   .pipe(dest(path.styles.save));
 
 export const templates = () => src(`${path.templates.pages}*.j2`)
+  .pipe(plumber())
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.json)
@@ -86,7 +95,6 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
 export const scripts = () => src(`${path.scripts.root}*.js`)
   .pipe(concat('script.js'))
   .pipe(dest(path.scripts.save))
-  // .pipe(uglify())
   .pipe(rename({
     suffix: '.min'
   }))
@@ -102,6 +110,7 @@ export const server = () => {
     ui: false,
     open: false
   });
+  watch(path.styles.css, css).on('change', bs.reload);
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
   watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
   watch(`${path.json}`, templates).on('change', bs.reload);
@@ -141,8 +150,11 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(rename('sprite.svg'))
   .pipe(dest(path.img.save))
 
+const images = () => src(`${path.images.root}/**/*.{png,jpg}`)
+  .pipe(dest(path.images.save))
+
 const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
-  .pipe(dest(`${dirs.dest}/fonts/`))
+  .pipe(dest(`${dirs.dest}/static/fonts/`))
 
 const vendorStyles = () => src(`${path.vendor.styles}*.min.css`)
   .pipe(dest(`${path.styles.save}`))
@@ -161,12 +173,11 @@ const pp = () => src(`${dirs.src}/pp/*`)
 /**
  * Задачи для разработки
  */
-export const start = series(parallel(fonts, pixelGlass, pp), parallel(styles, templates, scripts, vendorScripts, sprite), server);
+export const start = series(parallel(fonts, pixelGlass, pp), parallel(images, css, styles, templates, scripts, vendorScripts, sprite), server);
 
 /**
  * Для билда
  */
-// export const build = series(clean, fonts, parallel(styles, templates, scripts, vendorScripts, sprite));
-export const build = series(fonts, parallel(styles, templates, scripts, vendorScripts, sprite));
+export const build = series(css, fonts, parallel(images, styles, templates, scripts, vendorScripts, sprite));
 
 export default start;
