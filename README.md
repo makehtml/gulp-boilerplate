@@ -1,1 +1,1 @@
-# Базовый шаблон для Gulp (pug+sass)
+# Базовый шаблон для Gulp (ninjucks+sass)
