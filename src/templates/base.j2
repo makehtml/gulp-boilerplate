@@ -15,12 +15,12 @@
         background-position:  50% 0;
         background-image: url("pp/{{ page }}-mobile.jpg");
       }
-      @media (min-width: 834px) { html { background-image: url("pp/{{ page }}-tablet.jpg"); } }
-      @media (min-width: 1440px) { html { background-image: url("pp/{{ page }}-desktop.jpg"); } }
+      @media (min-width: 834px) { html { background-image: url("static/pp/{{ page }}-tablet.jpg"); } }
+      @media (min-width: 1440px) { html { background-image: url("static/pp/{{ page }}-desktop.jpg"); } }
       * { outline: 1px solid rgba(255,100,0,.2); }
     </style>
-    <link href="{{ url_for('static', filename='../pp/styles.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='../pp/script.js') }}"></script>
+    <link href="{{ url_for('static', filename='pp/styles.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='pp/script.js') }}"></script>
   {% endif %}
 </head>
 <body>
@@ -46,7 +46,7 @@
   <script>
     console.log('Привет из инлайн-скрипта, отрабатывает на всех страницах.');
   </script>
-  <script src="{{ url_for('static', filename='js/main.js') }}" type="module"></script>
+  <script src="{{ url_for('static', filename='js/script.min.js') }}"></script>
 
   {% block js %}{% endblock js %}
 </body>

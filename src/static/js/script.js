@@ -1,5 +1,5 @@
-const test = () => {
-  console.info('Привет из файла скриптов.');
-}
+import {isWebP} from './modules/functions.js';
+import {test} from './modules/test.js';
 
-export {test};
+isWebP();
+test();
