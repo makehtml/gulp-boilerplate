@@ -23,14 +23,15 @@
     "gulp-sourcemaps": "latest",
     "gulp-svgmin": "latest",
     "gulp-svgstore": "latest",
-    "gulp-terser": "latest",
     "pixel-glass": "github:makehtml/pixel-glass",
     "postcss-csso": "latest",
     "postcss-scss": "latest",
     "stylelint": "latest",
     "stylelint-config-recess-order": "latest",
     "stylelint-config-standard": "latest",
-    "stylelint-scss": "latest"
+    "stylelint-scss": "latest",
+    "webpack": "^5.78.0",
+    "webpack-stream": "^7.0.0"
   },
   "browserslist": [
     "last 2 version",

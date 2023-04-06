@@ -1,23 +1,23 @@
 import gulp from 'gulp';
-const { src, dest, watch, parallel, series } = gulp;
 import autoprefixer from 'autoprefixer';
 import browser from 'browser-sync';
 import cheerio from 'gulp-cheerio';
-import postcss from 'gulp-postcss';
 import csso from 'postcss-csso';
 import data from 'gulp-data';
 import { deleteSync } from 'del';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
+import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
 import sass from 'gulp-dart-sass';
+import sharpOptimizeImages from 'gulp-sharp-optimize-images';
+import sourcemaps from 'gulp-sourcemaps';
 import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
-import sharpOptimizeImages from "gulp-sharp-optimize-images";
-import terser from 'gulp-terser';
-import sourcemaps from 'gulp-sourcemaps';
+import webpack from 'webpack-stream';
+const { src, dest, watch, parallel, series } = gulp;
 
 /**
  *  Основные директории
@@ -67,6 +67,20 @@ const path = {
   }
 };
 
+const imageOptimizeConfigs = {
+  webp: {
+    quality: 80,
+    lossless: false,
+  },
+  png_to_png: {
+    quality: 80,
+    lossless: false,
+  },
+  jpg_to_jpg: {
+    quality: 80,
+    mozjpeg: true,
+  }
+}
 
 /**
  * Основные задачи
@@ -100,10 +114,16 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
 
 export const scripts = () => src(`${path.scripts.root}**/*.js`)
   .pipe(sourcemaps.init())
-  .pipe(terser({
-    keep_fnames: true,
-    mangle: false,
-    module: true,
+  // .pipe(terser({
+  //   keep_fnames: true,
+  //   mangle: false,
+  //   module: true,
+  // }))
+  .pipe(webpack({
+    // mode: 'development',
+    output: {
+      filename: 'script.min.js',
+    }
   }))
   .pipe(sourcemaps.write('./'))
   .pipe(dest(path.scripts.save));
@@ -153,42 +173,14 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(rename('sprite.svg'))
   .pipe(dest(path.img.save))
 
-export const img = ()  => src(`${path.img.root}/**/*.{png,jpg}`)
+export const img = ()  => src(`${path.img.root}/**/*.{png,jpg,jpeg}`)
   .pipe(plumber())
-  .pipe(sharpOptimizeImages({
-      webp: {
-        quality: 80,
-        lossless: false,
-      },
-      png_to_png: {
-        quality: 80,
-        lossless: false,
-      },
-      jpg_to_jpg: {
-        quality: 80,
-        mozjpeg: true,
-      },
-    })
-  )
+  .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.img.save));
 
-export const images = ()  => src(`${path.images.root}/**/*.{png,jpg}`)
+export const images = ()  => src(`${path.images.root}/**/*.{png,jpg,jpeg}`)
   .pipe(plumber())
-  .pipe(sharpOptimizeImages({
-      webp: {
-        quality: 80,
-        lossless: false,
-      },
-      png_to_png: {
-        quality: 80,
-        lossless: false,
-      },
-      jpg_to_jpg: {
-        quality: 80,
-        mozjpeg: true,
-      },
-    })
-  )
+  .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.images.save));
 
 const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
@@ -203,10 +195,10 @@ const vendorScripts = () => src(`${path.vendor.scripts}*.min.js`)
 export const vendor = parallel(vendorStyles, vendorScripts);
 
 const pixelGlass = () => src(`node_modules/pixel-glass/{styles.css,script.js}`)
-  .pipe(dest(`${dirs.dest}/pp/`))
+  .pipe(dest(`${dirs.dest}/static/pp/`))
 
-export const pp = () => src(`${dirs.src}/pp/*`)
-  .pipe(dest(`${dirs.dest}/pp/`))
+export const pp = () => src(`${dirs.src}/static/pp/*`)
+  .pipe(dest(`${dirs.dest}/static/pp/`))
 
 export const server = () => {
   const bs = browser.init({
