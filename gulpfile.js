@@ -5,7 +5,6 @@ import cheerio from 'gulp-cheerio';
 import csso from 'postcss-csso';
 import data from 'gulp-data';
 import { deleteSync } from 'del';
-import ifPlugin from 'gulp-if';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
@@ -95,7 +94,10 @@ export const css = () => src(path.styles.css)
   .pipe(dest(path.styles.save))
 
 export const styles = () => src(path.styles.compile, { sourcemaps: true })
-  .pipe(plumber())
+  .pipe(plumber(notify.onError({
+    title: 'SCSS',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(sass.sync().on('error', sass.logError))
   .pipe(postcss([
     autoprefixer(),
@@ -107,7 +109,10 @@ export const styles = () => src(path.styles.compile, { sourcemaps: true })
   .pipe(dest(path.styles.save, { sourcemaps: '.' }));
 
 export const templates = () => src(`${path.templates.pages}*.j2`)
-  .pipe(plumber())
+  .pipe(plumber(notify.onError({
+    title: 'J2',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.json)
@@ -119,6 +124,10 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
   .pipe(dest(path.templates.save));
 
 export const scripts = () => src(`${path.scripts.root}**/*.js`)
+  .pipe(plumber(notify.onError({
+    title: 'SCRIPTS',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(sourcemaps.init())
   .pipe(webpack({
     mode: mode.isBuild ? 'production' : 'development',
@@ -135,7 +144,10 @@ export const clean = (done) => {
 }
 
 export const sprite = () => src(`${path.img.icons}**/*.svg`)
-  .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+  .pipe(plumber(notify.onError({
+    title: 'SPRITE',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(svgmin({
     plugins: [{
       name: 'removeDoctype',
@@ -175,12 +187,18 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(dest(path.img.save))
 
 export const img = ()  => src(`${path.img.root}/**/*.{png,jpg,jpeg}`)
-  .pipe(plumber())
+  .pipe(plumber(notify.onError({
+    title: 'IMG',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.img.save));
 
 export const images = ()  => src(`${path.images.root}/**/*.{png,jpg,jpeg}`)
-  .pipe(plumber())
+  .pipe(plumber(notify.onError({
+    title: 'IMAGES',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.images.save));
 
