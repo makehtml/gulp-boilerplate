@@ -5,6 +5,7 @@ import cheerio from 'gulp-cheerio';
 import csso from 'postcss-csso';
 import data from 'gulp-data';
 import { deleteSync } from 'del';
+import ifPlugin from 'gulp-if';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
@@ -82,6 +83,11 @@ const imageOptimizeConfigs = {
   }
 }
 
+const mode = {
+  isBuild: process.argv.includes('--build'),
+  isDev: !process.argv.includes('--build')
+}
+
 /**
  * Основные задачи
  */
@@ -115,6 +121,7 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
 export const scripts = () => src(`${path.scripts.root}**/*.js`)
   .pipe(sourcemaps.init())
   .pipe(webpack({
+    mode: mode.isBuild ? 'production' : 'development',
     output: {
       filename: 'script.min.js',
     }
