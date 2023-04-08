@@ -1,3 +1,5 @@
-(() => {
-  console.info('Привет из файла скриптов.');
-})();
+import {isWebP} from './modules/functions.js';
+import {test} from './modules/test.js';
+
+isWebP();
+test();

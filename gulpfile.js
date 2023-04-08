@@ -1,21 +1,22 @@
 import gulp from 'gulp';
-const { src, dest, watch, parallel, series } = gulp;
-import autoprefixer from 'gulp-autoprefixer';
+import autoprefixer from 'autoprefixer';
 import browser from 'browser-sync';
-import concat from 'gulp-concat';
 import cheerio from 'gulp-cheerio';
-// import csso from 'gulp-csso';
+import csso from 'postcss-csso';
 import data from 'gulp-data';
-// import del from 'del';
+import { deleteSync } from 'del';
+import esbuild from 'gulp-esbuild';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
+import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
 import sass from 'gulp-dart-sass';
+import sharpOptimizeImages from 'gulp-sharp-optimize-images';
 import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
-// import uglify from 'gulp-uglify';
+const { src, dest, watch, parallel, series } = gulp;
 
 /**
  *  Основные директории
@@ -43,6 +44,7 @@ const path = {
   json: `${dirs.src}/data.json`,
   scripts: {
     root: `${dirs.src}/static/js/`,
+    compile: `${dirs.src}/static/js/script.js`,
     save: `${dirs.dest}/static/js/`
   },
   fonts: {
@@ -64,24 +66,47 @@ const path = {
   }
 };
 
+const imageOptimizeConfigs = {
+  webp: {
+    quality: 80,
+    lossless: false,
+  },
+  png_to_png: {
+    quality: 80,
+    lossless: false,
+  },
+  jpg_to_jpg: {
+    quality: 80,
+    mozjpeg: true,
+  }
+}
+
 /**
  * Основные задачи
  */
 export const css = () => src(path.styles.css)
   .pipe(dest(path.styles.save))
 
-export const styles = () => src(path.styles.compile)
+export const styles = () => src(path.styles.compile, { sourcemaps: true })
+  .pipe(plumber(notify.onError({
+    title: 'SCSS',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(sass.sync().on('error', sass.logError))
-  .pipe(dest(path.styles.save))
-  .pipe(autoprefixer())
-  // .pipe(csso())
+  .pipe(postcss([
+    autoprefixer(),
+    csso()
+  ]))
   .pipe(rename({
     suffix: `.min`
   }))
-  .pipe(dest(path.styles.save));
+  .pipe(dest(path.styles.save, { sourcemaps: '.' }));
 
 export const templates = () => src(`${path.templates.pages}*.j2`)
-  .pipe(plumber())
+  .pipe(plumber(notify.onError({
+    title: 'J2',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(data((file) => {
     return JSON.parse(
       fs.readFileSync(path.json)
@@ -92,48 +117,51 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
   }))
   .pipe(dest(path.templates.save));
 
-export const scripts = () => src(`${path.scripts.root}*.js`)
-  .pipe(concat('script.js'))
-  .pipe(dest(path.scripts.save))
-  .pipe(rename({
-    suffix: '.min'
+export const scripts = () => src(path.scripts.compile)
+  .pipe(plumber(notify.onError({
+    title: 'SCRIPTS',
+    message: 'Error: <%= error.message %>'
+  })))
+  .pipe(esbuild({
+    outfile: 'script.min.js',
+    bundle: true,
+    minify: true,
+    sourcemap: 'both'
   }))
   .pipe(dest(path.scripts.save));
 
-// export const clean = () => del([dirs.dest]);
-
-export const server = () => {
-  const bs = browser.init({
-    server: dirs.dest,
-    cors: true,
-    notify: false,
-    ui: false,
-    open: false
-  });
-  watch(path.styles.css, css).on('change', bs.reload);
-  watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
-  watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
-  watch(`${path.json}`, templates).on('change', bs.reload);
-  watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
-};
+export const clean = (done) => {
+  deleteSync([dirs.dest]);
+  done();
+}
 
 export const sprite = () => src(`${path.img.icons}**/*.svg`)
-  .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+  .pipe(plumber(notify.onError({
+    title: 'SPRITE',
+    message: 'Error: <%= error.message %>'
+  })))
   .pipe(svgmin({
     plugins: [{
-      removeDoctype: true
+      name: 'removeDoctype',
+      active: true
     }, {
-      removeXMLNS: true
+      name: 'removeXMLNS',
+      active : true
     }, {
-      removeXMLProcInst: true
+      name: 'removeXMLProcInst',
+      active: true
     }, {
-      removeComments: true
+      name: 'removeComments',
+      active: true
     }, {
-      removeMetadata: true
+      name: 'removeMetadata',
+      active: true
     }, {
-      removeEditorNSData: true
+      name: 'removeEditorNSData',
+      active: true
     }, {
-      removeViewBox: false
+      name: 'removeViewBox',
+      active: false
     }]
   }))
   .pipe(cheerio({
@@ -150,8 +178,21 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(rename('sprite.svg'))
   .pipe(dest(path.img.save))
 
-const images = () => src(`${path.images.root}/**/*.{png,jpg}`)
-  .pipe(dest(path.images.save))
+export const img = ()  => src(`${path.img.root}/**/*.{png,jpg,jpeg}`)
+  .pipe(plumber(notify.onError({
+    title: 'IMG',
+    message: 'Error: <%= error.message %>'
+  })))
+  .pipe(sharpOptimizeImages(imageOptimizeConfigs))
+  .pipe(dest(path.img.save));
+
+export const images = ()  => src(`${path.images.root}/**/*.{png,jpg,jpeg}`)
+  .pipe(plumber(notify.onError({
+    title: 'IMAGES',
+    message: 'Error: <%= error.message %>'
+  })))
+  .pipe(sharpOptimizeImages(imageOptimizeConfigs))
+  .pipe(dest(path.images.save));
 
 const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
   .pipe(dest(`${dirs.dest}/static/fonts/`))
@@ -165,19 +206,34 @@ const vendorScripts = () => src(`${path.vendor.scripts}*.min.js`)
 export const vendor = parallel(vendorStyles, vendorScripts);
 
 const pixelGlass = () => src(`node_modules/pixel-glass/{styles.css,script.js}`)
-  .pipe(dest(`${dirs.dest}/pp/`))
+  .pipe(dest(`${dirs.dest}/static/pp/`))
 
-const pp = () => src(`${dirs.src}/pp/*`)
-  .pipe(dest(`${dirs.dest}/pp/`))
+export const pp = () => src(`${dirs.src}/static/pp/*`)
+  .pipe(dest(`${dirs.dest}/static/pp/`))
+
+export const server = () => {
+  const bs = browser.init({
+    server: dirs.dest,
+    cors: true,
+    notify: false,
+    ui: false,
+    open: false
+  });
+  watch(path.styles.css, css).on('change', bs.reload);
+  watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
+  watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
+  watch(`${path.json}`, templates).on('change', bs.reload);
+  watch(`${path.scripts.root}**/*.js`, scripts).on('change', bs.reload);
+};
 
 /**
  * Задачи для разработки
  */
-export const start = series(parallel(fonts, pixelGlass, pp), parallel(images, css, styles, templates, scripts, vendorScripts, sprite), server);
+export const start = series(clean, parallel(fonts, pixelGlass, pp), parallel(img, images, css, styles, templates, scripts, vendor, sprite), server);
 
 /**
  * Для билда
  */
-export const build = series(css, fonts, parallel(images, styles, templates, scripts, vendorScripts, sprite));
+export const build = series(clean, css, fonts, parallel(img, images, styles, templates, scripts, vendor, sprite));
 
 export default start;
