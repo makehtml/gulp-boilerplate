@@ -13,7 +13,7 @@
     "gulp-csscomb": "latest",
     "gulp-dart-sass": "latest",
     "gulp-data": "latest",
-    "gulp-if": "^3.0.0",
+    "gulp-esbuild": "latest",
     "gulp-merge-json": "latest",
     "gulp-notify": "latest",
     "gulp-nunjucks-render": "latest",
@@ -21,7 +21,6 @@
     "gulp-postcss": "latest",
     "gulp-rename": "latest",
     "gulp-sharp-optimize-images": "latest",
-    "gulp-sourcemaps": "latest",
     "gulp-svgmin": "latest",
     "gulp-svgstore": "latest",
     "pixel-glass": "github:makehtml/pixel-glass",
@@ -30,16 +29,14 @@
     "stylelint": "latest",
     "stylelint-config-recess-order": "latest",
     "stylelint-config-standard": "latest",
-    "stylelint-scss": "latest",
-    "webpack": "latest",
-    "webpack-stream": "latest"
+    "stylelint-scss": "latest"
   },
   "browserslist": [
     "last 2 version",
     "> 2%"
   ],
   "scripts": {
-    "build": "gulp build --build",
+    "build": "gulp build",
     "start": "gulp start",
     "lint:styles": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json",
     "lint:templates": "djlint src/templates --lint --configuration .djlintrc",

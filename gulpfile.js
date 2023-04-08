@@ -5,6 +5,7 @@ import cheerio from 'gulp-cheerio';
 import csso from 'postcss-csso';
 import data from 'gulp-data';
 import { deleteSync } from 'del';
+import esbuild from 'gulp-esbuild';
 import fs from 'fs';
 import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
@@ -13,10 +14,8 @@ import rename from 'gulp-rename';
 import render from 'gulp-nunjucks-render';
 import sass from 'gulp-dart-sass';
 import sharpOptimizeImages from 'gulp-sharp-optimize-images';
-import sourcemaps from 'gulp-sourcemaps';
 import svgmin from 'gulp-svgmin';
 import svgstore from 'gulp-svgstore';
-import webpack from 'webpack-stream';
 const { src, dest, watch, parallel, series } = gulp;
 
 /**
@@ -45,7 +44,7 @@ const path = {
   json: `${dirs.src}/data.json`,
   scripts: {
     root: `${dirs.src}/static/js/`,
-    compile: `${dirs.src}/static/js/main.js`,
+    compile: `${dirs.src}/static/js/script.js`,
     save: `${dirs.dest}/static/js/`
   },
   fonts: {
@@ -80,11 +79,6 @@ const imageOptimizeConfigs = {
     quality: 80,
     mozjpeg: true,
   }
-}
-
-const mode = {
-  isBuild: process.argv.includes('--build'),
-  isDev: !process.argv.includes('--build')
 }
 
 /**
@@ -123,19 +117,17 @@ export const templates = () => src(`${path.templates.pages}*.j2`)
   }))
   .pipe(dest(path.templates.save));
 
-export const scripts = () => src(`${path.scripts.root}**/*.js`)
+export const scripts = () => src(path.scripts.compile)
   .pipe(plumber(notify.onError({
     title: 'SCRIPTS',
     message: 'Error: <%= error.message %>'
   })))
-  .pipe(sourcemaps.init())
-  .pipe(webpack({
-    mode: mode.isBuild ? 'production' : 'development',
-    output: {
-      filename: 'script.min.js',
-    }
+  .pipe(esbuild({
+    outfile: 'script.min.js',
+    bundle: true,
+    minify: true,
+    sourcemap: 'both'
   }))
-  .pipe(sourcemaps.write('./'))
   .pipe(dest(path.scripts.save));
 
 export const clean = (done) => {
