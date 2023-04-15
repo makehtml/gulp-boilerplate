@@ -1,3 +1,5 @@
+@use "sass:map";
+@use "sass:string";
 @use "./btn.scss" as *;
 @use "./media.scss" as *;
 
@@ -26,15 +28,15 @@ $escape-chars: (
     @return false;
   }
 
-  $icon-map: map-get($svg-icons, $name);
+  $icon-map: map.get($svg-icons, $name);
   $escaped-string: "";
-  $unquote-icon: unquote($icon-map);
+  $unquote-icon: string.unquote($icon-map);
 
   @for $i from 1 through str-length($unquote-icon) {
-    $char: str-slice($unquote-icon, $i, $i);
-    $char-lookup: map-get($escape-chars, $char);
+    $char: string.slice($unquote-icon, $i, $i);
+    $char-lookup: map.get($escape-chars, $char);
 
-    @if $char-lookup != null {
+    @if not $char-lookup {
       $char: $char-lookup;
     }
 
@@ -122,7 +124,7 @@ $escape-chars: (
   &:focus:autofill {
     color: green;
     -webkit-text-fill-color: var(--theme-fg-alt);
-    box-shadow: 0 0 0 1000px var(--theme-bg) inset;
+    box-shadow:  0 0 1000px var(--theme-bg) inset;
   }
 
   &:valid:not(:placeholder-shown) { border-color: var(--t-success) !important; }
@@ -159,7 +161,7 @@ $escape-chars: (
   > select,
   > textarea {
     &:focus,
-    &:not(:placeholder-shown) { ~ label { transform: scale(.65) translateX(.25rem) translateY(calc(-100% - .7rem)); } }
+    &:not(:placeholder-shown) { ~ label { transform: scale(.65) translateX(.25rem) translateY(calc(-100% - .7rem)); } } /* stylelint-disable-line no-descending-specificity */
 
     // &:valid { border-color: var(--color-primary-active); }
     &::placeholder { color: transparent; }

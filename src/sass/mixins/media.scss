@@ -1,12 +1,13 @@
+@use "sass:map";
 @use "../common/vars.scss" as *;
 
 @function min-width($width-name) {
-  $width: map-get($widths, $width-name);
+  $width: map.get($widths, $width-name);
 
   @return "(min-width: #{$width})";
 }
 @function max-width($width-name) {
-  $width: map-get($widths, $width-name);
+  $width: map.get($widths, $width-name);
 
   @return "(max-width: #{$width - 1})";
 }
