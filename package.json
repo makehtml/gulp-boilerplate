@@ -10,7 +10,6 @@
     "gulp": "latest",
     "gulp-cheerio": "latest",
     "gulp-concat": "latest",
-    "gulp-csscomb": "latest",
     "gulp-dart-sass": "latest",
     "gulp-data": "latest",
     "gulp-esbuild": "latest",
@@ -28,7 +27,6 @@
     "postcss-lit": "latest",
     "postcss-scss": "latest",
     "stylelint": "latest",
-    "stylelint-config-recess-order": "latest",
     "stylelint-config-standard": "latest",
     "stylelint-config-standard-scss": "latest",
     "stylelint-scss": "latest"
