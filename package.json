@@ -25,10 +25,12 @@
     "gulp-svgstore": "latest",
     "pixel-glass": "github:makehtml/pixel-glass",
     "postcss-csso": "latest",
+    "postcss-lit": "latest",
     "postcss-scss": "latest",
     "stylelint": "latest",
     "stylelint-config-recess-order": "latest",
     "stylelint-config-standard": "latest",
+    "stylelint-config-standard-scss": "latest",
     "stylelint-scss": "latest"
   },
   "browserslist": [
@@ -38,9 +40,9 @@
   "scripts": {
     "build": "gulp build",
     "start": "gulp start",
-    "lint:styles": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json",
+    "lint:styles": "stylelint src/sass/**/*.scss --config .stylelintrc.json",
     "lint:templates": "djlint src/templates --lint --configuration .djlintrc",
-    "fix:styles": "stylelint 'src/sass/**/*.scss' --config .stylelintrc.json --fix",
+    "fix:styles": "stylelint src/sass/**/*.scss --config .stylelintrc.json --fix",
     "lint": "npm run lint:styles && npm run lint:templates"
   },
   "repository": {

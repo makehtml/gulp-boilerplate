@@ -26,6 +26,7 @@
 .form__checkbox { @include form-checkbox; }
 .form__radio { @include form-radio; }
 
+/* stylelint-disable no-descending-specificity */
 .form__control {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -35,6 +36,7 @@
   &--floating { @include form-floating; }
   &--checkbox { @include form-checkbox-wrap; }
 }
+/* stylelint-enable no-descending-specificity */
 
 .form__error-feedback {
   width: 100%;

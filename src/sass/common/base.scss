@@ -1,4 +1,6 @@
 @use "sass:list";
+@use "sass:color";
+@use "sass:map";
 @use "../mixins/media.scss" as *;
 @use "../common/vars.scss" as *;
 
@@ -9,8 +11,8 @@
   --color-primary: #{$color-primary};
   --color-secondary: #{$color-secondary};
   --color-tertiary: #{$color-tertiary};
-  --color-hover: #{darken($color-primary, 15%)};
-  --color-active: #{lighten($color-primary, 15%)};
+  --color-hover: #{color.adjust($color-primary, $lightness: -15%)};
+  --color-active: #{color.adjust($color-primary, $lightness: 15%)};
 }
 
 html { height: 100%; }
@@ -18,7 +20,7 @@ html { height: 100%; }
 body {
   display: grid;
   grid-template-rows: min-content 1fr min-content;
-  min-width: map-get($widths, xs);
+  min-width: map.get($widths, xs);
   min-height: 100%;
   margin: 0;
   font: list.slash($font-size, $line-height) $font-family;
@@ -26,10 +28,10 @@ body {
   letter-spacing: $letter-spacing;
   background-color: $color-bg;
 
-  @include media-min(sm) { min-width: map-get($widths, sm); }
-  @include media-min(md) { min-width: map-get($widths, md); }
-  @include media-min(lg) { min-width: map-get($widths, lg); }
-  @include media-min(xl) { min-width: map-get($widths, xl); }
+  @include media-min(sm) { min-width: map.get($widths, sm); }
+  @include media-min(md) { min-width: map.get($widths, md); }
+  @include media-min(lg) { min-width: map.get($widths, lg); }
+  @include media-min(xl) { min-width: map.get($widths, xl); }
 }
 
 a {

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Шрифты
 $font-family: -apple-system, system-ui, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
 $font-size: 14px;
@@ -13,8 +15,8 @@ $color-primary: #fb565a;
 $color-secondary: #00ca74;
 $color-tertiary: #efc84a;
 $color-active-control: #c1c1c1;
-$color-hover: darken($color-primary, 15%);
-$color-active: lighten($color-primary, 15%);
+$color-hover: color.adjust($color-primary, $lightness: -15%);
+$color-active: color.adjust($color-primary, $lightness: 15%);
 
 // Размеры
 $widths: (

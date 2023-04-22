@@ -1,9 +1,10 @@
+@use "sass:map";
 @use "../common/vars.scss" as *;
 @use "./media.scss" as *;
 
 @mixin container {
   box-sizing: border-box;
-  width: map-get($widths, sm);
+  width: map.get($widths, sm);
   padding-right: $gap-sm;
   padding-left: $gap-sm;
   margin-right: auto;
@@ -11,16 +12,16 @@
 
   @include media-min(md) {
     width: 90%;
-    min-width: map-get($widths, md);
+    min-width: map.get($widths, md);
     padding-right: $gap-md;
     padding-left: $gap-md;
   }
   @include media-min(lg) {
-    min-width: map-get($widths, lg);
+    min-width: map.get($widths, lg);
     padding-right: $gap-lg;
     padding-left: $gap-lg;
   }
   @include media-min(xl) {
-    width: map-get($widths, xl);
+    width: map.get($widths, xl);
   }
 }
