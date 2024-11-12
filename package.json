@@ -45,13 +45,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jokerinteractive/gulp-boilerplate.git"
+    "url": "git+https://github.com/makehtml/gulp-boilerplate.git"
   },
   "author": "Joker Interactive",
   "license": "WTFPL",
   "bugs": {
-    "url": "https://github.com/jokerinteractive/gulp-boilerplate/issues"
+    "url": "https://github.com/makehtml/gulp-boilerplate/issues"
   },
-  "homepage": "https://github.com/jokerinteractive/gulp-boilerplate/",
+  "homepage": "https://github.com/makehtml/gulp-boilerplate/",
   "type": "module"
 }
