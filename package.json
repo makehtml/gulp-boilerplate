@@ -1,12 +1,11 @@
 {
   "name": "gulp-sass-nunjucks",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Базовый каркас для начала разработки на jinja + sass",
   "devDependencies": {
     "autoprefixer": "latest",
     "browser-sync": "latest",
     "del": "latest",
-    "djlint": "latest",
     "gulp": "latest",
     "gulp-cheerio": "latest",
     "gulp-concat": "latest",
