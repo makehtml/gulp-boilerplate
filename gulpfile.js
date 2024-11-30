@@ -34,7 +34,6 @@ const path = {
     root: `${dirs.src}/sass/`,
     compile: `${dirs.src}/sass/style.scss`,
     save: `${dirs.dest}/static/css/`,
-    css: `${dirs.src}/css/*.css`,
   },
   templates: {
     root: `${dirs.src}/templates/`,
@@ -84,9 +83,6 @@ const imageOptimizeConfigs = {
 /**
  * Основные задачи
  */
-export const css = () => src(path.styles.css)
-  .pipe(dest(path.styles.save))
-
 export const styles = () => src(path.styles.compile, { sourcemaps: true })
   .pipe(plumber(notify.onError({
     title: 'SCSS',
@@ -141,28 +137,15 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
     message: 'Error: <%= error.message %>'
   })))
   .pipe(svgmin({
-    plugins: [{
-      name: 'removeDoctype',
-      active: true
-    }, {
-      name: 'removeXMLNS',
-      active : true
-    }, {
-      name: 'removeXMLProcInst',
-      active: true
-    }, {
-      name: 'removeComments',
-      active: true
-    }, {
-      name: 'removeMetadata',
-      active: true
-    }, {
-      name: 'removeEditorNSData',
-      active: true
-    }, {
-      name: 'removeViewBox',
-      active: false
-    }]
+    plugins: [
+      "removeDoctype",
+      "removeXMLNS",
+      "removeXMLProcInst",
+      "removeComments",
+      "removeMetadata",
+      "removeEditorNSData",
+      // "removeViewBox"
+    ]
   }))
   .pipe(cheerio({
     run: function ($) {
@@ -178,7 +161,7 @@ export const sprite = () => src(`${path.img.icons}**/*.svg`)
   .pipe(rename('sprite.svg'))
   .pipe(dest(path.img.save))
 
-export const img = ()  => src(`${path.img.root}/**/*.{png,jpg,jpeg}`)
+export const img = ()  => src(`${path.img.root}**/*.{png,jpg,jpeg}`)
   .pipe(plumber(notify.onError({
     title: 'IMG',
     message: 'Error: <%= error.message %>'
@@ -186,7 +169,7 @@ export const img = ()  => src(`${path.img.root}/**/*.{png,jpg,jpeg}`)
   .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.img.save));
 
-export const images = ()  => src(`${path.images.root}/**/*.{png,jpg,jpeg}`)
+export const images = ()  => src(`${path.images.root}**/*.{png,jpg,jpeg}`)
   .pipe(plumber(notify.onError({
     title: 'IMAGES',
     message: 'Error: <%= error.message %>'
@@ -194,8 +177,8 @@ export const images = ()  => src(`${path.images.root}/**/*.{png,jpg,jpeg}`)
   .pipe(sharpOptimizeImages(imageOptimizeConfigs))
   .pipe(dest(path.images.save));
 
-const fonts = () => src(`${dirs.src}/fonts/*.{woff,woff2}`)
-  .pipe(dest(`${dirs.dest}/static/fonts/`))
+const fonts = () => src(`${path.fonts.root}*.{woff,woff2}`)
+  .pipe(dest(`${path.fonts.save}`))
 
 const vendorStyles = () => src(`${path.vendor.styles}*.min.css`)
   .pipe(dest(`${path.styles.save}`))
@@ -219,7 +202,6 @@ export const server = () => {
     ui: false,
     open: false
   });
-  watch(path.styles.css, css).on('change', bs.reload);
   watch(`${path.styles.root}**/*.scss`, styles).on('change', bs.reload);
   watch(`${path.templates.root}**/*.j2`, templates).on('change', bs.reload);
   watch(`${path.json}`, templates).on('change', bs.reload);
@@ -229,11 +211,11 @@ export const server = () => {
 /**
  * Задачи для разработки
  */
-export const start = series(clean, parallel(fonts, pixelGlass, pp), parallel(img, images, css, styles, templates, scripts, vendor, sprite), server);
+export const start = series(clean, parallel(fonts, pixelGlass, pp), parallel(img, images, styles, templates, scripts, vendor, sprite), server);
 
 /**
  * Для билда
  */
-export const build = series(clean, css, fonts, parallel(img, images, styles, templates, scripts, vendor, sprite));
+export const build = series(clean, fonts, parallel(img, images, styles, templates, scripts, vendor, sprite));
 
 export default start;
